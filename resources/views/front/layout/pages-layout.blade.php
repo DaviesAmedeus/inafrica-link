@@ -47,7 +47,7 @@
             <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0"
                 style="background-color: rgb(255, 255, 255); color: white">
                 <a href="" class="navbar-brand p-0">
-                    {{-- <h1 class="m-0"><i class="fa fa-map-marker-alt me-3"></i>inafrica ~ link</h1> --}}
+                   
                     <img src="{{ asset('front/assets/img/inafrica-weblogo.png') }}" alt="Logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -57,25 +57,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
                         <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
-
-
-
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Safaris</a>
-
-                            <div class="dropdown-menu m-0">
-                                <a href="{{ route('luxurysafaris') }}" class="dropdown-item">Luxury Safaris</a>
-                                <a href="{{ route('luxurysafaris') }}" class="dropdown-item">Budget Safaris</a>
-                                <a href="{{ route('luxurysafaris') }}" class="dropdown-item">Mid-range Safaris</a>
-                                <a href="{{ route('luxurysafaris') }}" class="dropdown-item">Family Safaris</a>
-                                <a href="{{ route('luxurysafaris') }}" class="dropdown-item">Honeymoon Safaris</a>
-                            </div>
-                        </div>
-                        <a href="{{ route('luxurysafaris') }}" class="nav-item nav-link ">Cultural Tourism</a>
-                        <a href="{{ route('luxurysafaris') }}" class="nav-item nav-link">Treks</a>
-                        <a href="{{ route('luxurysafaris') }}" class="nav-item nav-link ">Beach Holidays</a>
-                        <a href="{{ route('luxurysafaris') }}" class="nav-item nav-link ">Research Tours</a>
-                        <a href="{{ route('luxurysafaris') }}" class="nav-item nav-link ">Accomodations</a>
+                          {!! navigations() !!}
 
 
                         <div class="nav-item dropdown">

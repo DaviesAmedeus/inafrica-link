@@ -90,6 +90,25 @@
                     </a>
                 </div>
             </div>
+            <div class="user-info-dropdown">
+        <div class="dropdown">
+            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                <span class="user-icon">
+                    <img src="" alt="" />
+                </span>
+                <span class="user-name">{{ Auth::user()->name}}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                <a class="dropdown-item" href=""><i class="dw dw-user1"></i> Profile</a>
+                <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
+                <a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
+                <a class="dropdown-item" href="{{ route('admin.logout') }}"
+                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i
+                        class="dw dw-logout"></i> Log Out</a>
+                <form action="{{ route('admin.logout') }}" id="logout-form" method="POST">@csrf</form>
+            </div>
+        </div>
+    </div>
             <div class="user-notification">
                 <div class="dropdown">
                     <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
@@ -172,7 +191,7 @@
         </div>
     </div>
 
-    <div class="right-sidebar">
+    {{-- <div class="right-sidebar">
         <div class="sidebar-title">
             <h3 class="weight-600 font-16 text-blue">
                 Layout Settings
@@ -265,13 +284,13 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="left-side-bar">
         <div class="brand-logo">
             <a href="/">
-                <img src="" alt="" class="dark-logo site_logo" />
-                <img src="" alt="" class="light-logo site_logo" />
+                <img src="{{ asset('front/assets/img/inafrica-weblogo.png') }}" alt="" class="dark-logo site_logo" />
+                <img src="{{ asset('front/assets/img/inafrica-weblogo-white.png') }}" alt="" class="light-logo site_logo" />
             </a>
             <div class="close-sidebar" data-toggle="left-sidebar-close">
                 <i class="ion-close-round"></i>
@@ -287,23 +306,21 @@
                         </a>
                     </li>
                     <li>
-                        <a href="" class="dropdown-toggle no-arrow">
-                            <span class="micon fa fa-th-list"></span><span class="mtext">Categories</span>
+                        <a href="{{ route('admin.categories') }}" class="dropdown-toggle no-arrow {{ Route::is('admin.categories') ? 'active' : '' }}">
+                            <span class="micon fa fa-th-list"></span><span class="mtext">Tour Categories</span>
                         </a>
                     </li>
 
                     <li class="dropdown">
-                        <a href="javascript:;"
-                            class="dropdown-toggle">
-                            <span class="micon fa fa-newspaper-o"></span><span class="mtext"> Posts </span>
+                        <a href="javascript:;" class="dropdown-toggle {{ Route::is('admin.add_post') || Route::is('admin.posts') || Route::is('admin.edit_post') ? 'active' : '' }}">
+                            <span class="micon fa fa-car"></span><span class="mtext"> Tours </span>
                         </a>
                         <ul class="submenu">
-                            <li><a href="" class="">New</a></li>
-                            <li><a href="" class="">Posts</a></li>
+                            <li><a href="{{ route('admin.add_tour') }}" class="{{ Route::is('admin.add_tour') ? 'active' : '' }}">New</a></li>
+                            <li><a href="{{ route('admin.tours') }}" class="{{ Route::is('admin.tours') ? 'active' : '' }}">Tours</a></li>
 
                         </ul>
                     </li>
-
                     <li class="dropdown">
                         <a href="javascript:;" class="dropdown-toggle">
                             <span class="micon fa fa-shopping-bag"></span><span class="mtext">Shop</span>
