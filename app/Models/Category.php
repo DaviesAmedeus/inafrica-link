@@ -36,8 +36,8 @@ class Category extends Model
         return $this->belongsTo(ParentCategory::class, 'parent', 'id');
     }
 
-    // public function posts(){
-    //     return $this->hasMany(Post::class, 'category');
-    // }
+    public function tours(){
+        return $this->hasMany(Tour::class, 'category');
+    }
 
 }
