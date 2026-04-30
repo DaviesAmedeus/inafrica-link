@@ -53,7 +53,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/tour/new', 'addTour')->name('add_tour');
             Route::post('/tour/create', 'createTour')->name('create_tour');
             Route::get('/tours', 'allTours')->name('tours');
-            // Route::get('/tour/{id}/edit', 'editTour')->name('edit_tour');
-            // Route::tour('/tour/update', 'updateTour')->name('update_tour');
+            Route::get('/tour/{id}/edit', 'editTour')->name('edit_tour');
+            Route::post('/tour/update', 'updateTour')->name('update_tour');
         });
 });

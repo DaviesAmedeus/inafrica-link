@@ -31,17 +31,17 @@
 
 @push('scripts')
     <script>
-        window.addEventListener('deletePost', function(event) {
+        window.addEventListener('deleteTour', function(event) {
             var id = event.detail[0].id;
             // ijabo paks confirmation model
             $().konfirma({
                 title: 'Are you sure?',
-                html: 'You want  to delete this post',
+                html: 'You want  to delete this tour',
                 cancelButtonText: 'Cancel',
                 confirmButtonText: 'Yes, Delete',
                 fontSize: '0.87rem',
                 done: function() {
-                    Livewire.dispatch('deletePostAction', [id]);
+                    Livewire.dispatch('deleteTourAction', [id]);
                 }
             });
         });

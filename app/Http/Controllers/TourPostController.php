@@ -59,7 +59,6 @@ class TourPostController extends Controller
 
             $path = "images/tours/";
             $resized_path = $path . "resized/";
-
             $file = $request->file('featured_image');
             $filename = "tour_img_" . time() . '.' . $file->getClientOriginalExtension();
 
@@ -122,11 +121,141 @@ class TourPostController extends Controller
         }
     }
 
-      public function allTours(Request $request)
+    public function allTours(Request $request)
     {
         $data = [
             'pageTitle' => 'Tours'
         ];
         return view('back.pages.tours', $data);
+    }
+
+
+    public function editTour(Request $request, $id = null)
+    {
+        $tour = Tour::findOrFail($id);
+
+        $tour->itinerary = json_decode($tour->itinerary, true);
+
+        // dd($tour);
+
+        $categories_html = '';
+        $pcategories = ParentCategory::whereHas('children')->orderBy('name', 'asc')->get();
+        $categories = Category::where('parent', 0)->orderBy('name', 'asc')->get();
+
+        if (count($pcategories) > 0) {
+            foreach ($pcategories as $item) {
+                $categories_html .= '<optgroup label="' . $item->name . '">';
+                foreach ($item->children as $category) {
+                    $selected = $category->id == $tour->category ? 'selected' : '';
+                    $categories_html .= '<option value="' . $category->id . '" ' . $selected . '>' . $category->name . '</option>';
+                }
+                $categories_html .= '</optgroup>';
+            }
+        }
+
+        if (count($categories) > 0) {
+            foreach ($categories as $item) {
+                $selected = $item->id == $tour->category ? 'selected' : '';
+                $categories_html .= '<option value="' . $item->id . '" ' . $selected . '>' . $item->name . '</option>';
+            }
+        }
+
+        $data = [
+            'pageTitle' => 'Edit',
+            'tour' => $tour,
+            'categories_html' => $categories_html
+        ];
+
+        return view('back.pages.edit_tour', $data);
+    }
+
+    public function updateTour(Request $request)
+    {
+
+        $tour = Tour::findOrFail($request->tour_id);
+        $featured_image_name = $tour->breadcrumb_img_tour;
+
+        // Validate form
+        $request->validate([
+            'title' => 'required|unique:tours,title,' . $tour->id,
+            'description' => 'required',
+            'overview' => 'required',
+            'category' => 'required|exists:categories,id',
+            'featured_image' => 'nullable|mimes:jpeg,jpg,png|max:2050',
+            'itinerary' => 'required|array',
+            'itinerary.*.title' => 'required|string|max:255',
+            'itinerary.*.content' => 'required|string',
+        ]);
+
+
+
+        if ($request->hasFile('featured_image')) {
+            $old_featured_image = $tour->breadcrumb_img_tour;
+            $path = 'images/tours/';
+            $resized_path = $path . "resized/";
+            $file = $request->file('featured_image');
+            $filename = "tour_img_" . time() . '.' . $file->getClientOriginalExtension();
+
+            // upload a new featured image
+            $upload = $file->storeAs($path, $filename, 'public');
+
+            if ($upload) {
+                // FULL PATHS (correct)
+                $fullPath = storage_path('app/public/' . $path . $filename);
+                $fullResizedPath = storage_path('app/public/' . $resized_path);
+
+                // THUMBNAIL
+                Image::make($fullPath)
+                    ->fit(250, 250)
+                    ->save($fullResizedPath . 'thumb_' . $filename);
+
+                // RESIZED IMAGE
+                Image::make($fullPath)
+                    ->fit(512, 320)
+                    ->save($fullResizedPath . 'resized_' . $filename);
+
+
+
+                // Deleting old featured image
+                if ($old_featured_image != null && File::exists(storage_path('app/public/' . $path . $old_featured_image))) {
+                    // Deleting
+                    File::delete(storage_path('app/public/' . $path . $old_featured_image));
+
+                    // Delete resized image
+                    if (File::exists(storage_path('app/public/' . $resized_path . 'resized_' . $old_featured_image))) {
+                        File::delete(storage_path('app/public/' . $resized_path . 'resized_' . $old_featured_image));
+                    }
+
+                    // Delete thumbnail image
+                    if (File::exists(storage_path('app/public/' . $resized_path . 'thumb_' . $old_featured_image))) {
+                        File::delete(storage_path('app/public/' . $resized_path . 'thumb_' . $old_featured_image));
+                    }
+                }
+
+                $featured_image_name = $filename;
+            } else {
+                return response()->json(['status' => 0, 'message' => 'Something went wrong while uploading the featured image']);
+            }
+        }
+
+        //UPDATING post data in database
+        $tour->category = $request->category;
+        $tour->title = $request->title;
+        $tour->slug = null;
+        $tour->description = $request->description;
+        $tour->overview = $request->overview;
+        $tour->itinerary = json_encode($request->itinerary);
+        $tour->breadcrumb_img_tour = $featured_image_name;
+        $tour->tags = $request->tags;
+        $tour->meta_keywords = $request->meta_keywords;
+        $tour->meta_description = $request->meta_description;
+        $tour->visibility = $request->visibility;
+        $saved = $tour->save();
+
+        if ($saved) {
+            return response()->json(['status' => 1, 'message' => 'The tour was updated successfully!']);
+        } else {
+            return response()->json(['status' => 0, 'message' => 'Something went wrong while updating the blog post']);
+        }
     }
 }

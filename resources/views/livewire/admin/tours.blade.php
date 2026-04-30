@@ -84,10 +84,10 @@
                             </td>
                             <td>
                                 <div class="table-actions">
-                                    <a href="" data-color="#265ed7" style="color: rgb(38, 94, 215)">
+                                    <a href="{{ route('admin.edit_tour', ['id'=>$item->id]) }}" data-color="#265ed7" style="color: rgb(38, 94, 215)">
                                         <i class="icon-copy dw dw-edit2"></i>
                                     </a>
-                                    <a href="javascript:;" wire:click="" data-color="#e95959" style="color: rgb(233, 89, 89)">
+                                    <a  href="javascript:;" wire:click="deleteTour({{ $item->id }})" data-color="#e95959" style="color: rgb(233, 89, 89)">
                                         <i class="icon-copy dw dw-delete-3"></i>
                                     </a>
                                 </div>
@@ -97,7 +97,7 @@
                     @empty
                         <tr>
                             <td colspan="7">
-                                <span class="text-danger">No post(s)</span>
+                                <span class="text-danger">No Tour(s)</span>
                             </td>
                         </tr>
                     @endforelse
