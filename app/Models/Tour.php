@@ -42,6 +42,10 @@ class Tour extends Model
         return $this->hasOne(Category::class, 'id', 'category');
     }
 
+    public function tourPrices(){
+        return $this->hasMany(TourPrice::class, 'tour_id');
+    }
+
 
     public function scopeSearch($query, $term){
         $term = "%$term%";

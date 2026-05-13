@@ -27,7 +27,8 @@
                                 <tr data-index="" data-ordering="">
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>-</td>
+                                    <td>{{ $item->children->count() }}</td>
+
                                     <td>
                                         <div class="table-actions">
                                             <a href="javascript:;" wire:click="editParentCategory({{ $item->id }})"
@@ -87,14 +88,15 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ !is_null($item->parent_category) ? $item->parent_category->name : '-' }}</td>
-                                    <td>4</td>
+                                    <td>{{ $item->tours->count() }}</td>
                                     <td>
                                         <div class="table-actions">
                                             <a href="javascript:;" wire:click="editCategory({{ $item->id }})"
                                                 class="text-primary mx-2">
                                                 <i class="dw dw-edit2"></i>
                                             </a>
-                                            <a href="javascript:;" wire:click="" class="text-danger mx-2">
+                                            <a href="javascript:;" wire:click="deleteCategory({{ $item->id }})"
+                                                class="text-danger mx-2">
                                                 <i class="dw dw-delete-3"></i>
                                             </a>
                                         </div>
@@ -180,6 +182,7 @@
                             @if ($isUpdateCategoryMode)
                                 <input type="hidden" wire:model="category_id">
                             @endif
+
                             <div class="form-group">
                                 <label for=""><b>Parent category</b>:</label>
                                 <select wire:model="parent" class="custom-select">
@@ -209,10 +212,11 @@
                                     <span class="text-danger ml-1">{{ $message }}</span>
                                 @enderror
                             </div>
+                            
                             @if ($selected_breadcrumb_img)
                                 <div class="d-block" style="max-width: 200px;">
-                                    <img src="{{ asset('storage/'.$selected_breadcrumb_img) }}" alt="" class="img-thumbnail"
-                                        style="max-width: 100%;height:auto;">
+                                    <img src="{{ asset('storage/' . $selected_breadcrumb_img) }}" alt=""
+                                        class="img-thumbnail" style="max-width: 100%;height:auto;">
                                 </div>
                             @endif
 

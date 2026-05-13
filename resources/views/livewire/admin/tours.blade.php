@@ -56,6 +56,7 @@
                     <th scope="col">Title</th>
                     <th scope="col">Author</th>
                     <th scope="col">Category</th>
+                    <th scope="col" style="text-align: center;">Tour Pricing</th>
                     <th scope="col">Visibility</th>
                     <th scope="col">Action</th>
                 </thead>
@@ -73,6 +74,12 @@
                             <td>{{ $item->title }}</td>
                             <td>{{ $item->author->name }}</td>
                             <td>{{ $item->tour_category->name }}</td>
+                            <td><div class="table-actions justify-content-center">
+                                    <a href="" data-color="#265ed7" style="color: rgb(38, 94, 215);">
+                                        <i class="icon-copy dw dw-eye"></i>
+                                    </a>
+
+                                </div></td>
                             <td>
                                 @if ($item->visibility == 1)
                                     <span class="badge badge-pill badge-success"><i

@@ -99,6 +99,70 @@
                     </div>
                 </div>
 
+                <div class="card card-box mb-2">
+                    <div class="card-header weight-500">TOUR PRICING</div>
+                    <div class="card-body">
+
+
+
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="pricing-table">
+
+                                <thead>
+                                    <tr>
+                                        <th>People</th>
+                                        <th>Price(USD) per person</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="pricing-body">
+                                    @if (!empty($tour->tourPrices))
+
+                                        @foreach ($tour->tourPrices as $index => $price)
+                                            <tr>
+                                                <input type="hidden" name="pricing[{{ $index }}][id]"
+                                                    value="{{ $price->id }}">
+
+                                                <td>
+                                                    <input type="number" name="pricing[{{ $index }}][people]"
+                                                        class="form-control people-input" placeholder="e.g 5" min="1"
+                                                        max="10" value="{{ $price->people }}">
+
+                                                </td>
+
+                                                <td>
+                                                    <input type="number" name="pricing[{{ $index }}][price]"
+                                                        class="form-control price-input" placeholder="e.g 1200"
+                                                        min="0" value="{{ $price->price }}">
+                                                </td>
+
+                                                <td>
+                                                    <button type="button" class="btn btn-danger remove-row">
+                                                        Remove
+                                                    </button>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
+
+
+
+                                    @endif
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- Error Message when fields are empty -->
+                        <div id="pricing-error" class="alert alert-danger d-none"></div>
+                        <button type="button" id="add-price-group" class="btn btn-primary">
+                            + Add Pricing Group
+                        </button>
+
+                    </div>
+                </div>
+
 
 
 
@@ -235,6 +299,89 @@
 
 
 
+        /* ---UPDATING MECHANISM START --- */
+        let pricingIndex = {{ count($tour->tourPrices) }};
+
+        function addPricingRow() {
+            let row = `
+            <tr>
+
+                <td>
+                    <input type="number"
+                        name="pricing[${pricingIndex}][people]"
+                        class="form-control people-input"
+                        placeholder="e.g 5"
+                        min="1"
+                        max="10">
+
+                </td>
+
+                <td>
+                    <input type="number"
+                        name="pricing[${pricingIndex}][price]"
+                        class="form-control price-input"
+                        placeholder="e.g 1200"
+                        min="0">
+                </td>
+
+                <td>
+                    <button type="button"
+                        class="btn btn-danger remove-row">
+                        Remove
+                    </button>
+                </td>
+
+            </tr>
+        `;
+            $('#pricing-body').append(row);
+            pricingIndex++;
+        };
+
+        $('#add-price-group').click(function() {
+
+            let lastRow = $('#pricing-body tr:last');
+
+            let people = lastRow.find('.people-input').val();
+
+            let price = lastRow.find('.people-price').val();
+
+            // VALIDATION (checking if either of the fields are empty)
+            if (people == '' || price == '') {
+                $('#pricing-error')
+                    .removeClass('d-none')
+                    .text('Please complete the current pricing group first.');
+                return;
+            }
+
+            // CLEAR ERROR
+            $('#pricing-error')
+                .addClass('d-none')
+                .text('');
+
+            addPricingRow();
+        });
+
+        // Removing the pricing group row
+        $(document).on('click', '.remove-row', function() {
+
+            if ($('#pricing-body tr').length == 1) {
+
+                $('#pricing-error')
+                    .removeClass('d-none')
+                    .text('At least one pricing group is required.');
+                return;
+            }
+            $(this).closest('tr').remove();
+        });
+
+        /* ---UPDATE PRICING MECHANISM END --- */
+
+
+
+
+
+
+
 
 
         // Submitting the form using ajax / i.e UPDATE A POST
@@ -244,6 +391,10 @@
             var overview = CKEDITOR.instances.overview.getData();
             var formdata = new FormData(form);
             formdata.append('overview', overview);
+
+            // for (let [key, value] of formdata.entries()) {
+            //     console.log(key, value, typeof value);
+            // }
 
             $.ajax({
                 url: $(form).attr('action'),

@@ -2,8 +2,8 @@
 @section('pageTitle', isset($pageTitle) ? $pageTitle : 'Document title')
 @section('breadcrumb-section')
     <!-- Breadcrumb Start -->
-    <x-front.breadcrumb img_link="luxury-safaris-bread.webp">
-    4 Day Tanzania luxury Safari
+    <x-front.breadcrumb img_link="storage/images/tours/{{$tour->breadcrumb_img_tour}}">
+   {{ $tour->title }}
     </x-front.breadcrumb>
     <!-- Breadcrumb End -->
 @endsection
@@ -15,9 +15,9 @@
         <div class="col-lg-8">
 
             <!-- Tour Description -->
-            <h2 class="mb-3">4 Day Tanzania luxury Safari</h2>
+            <h2 class="mb-3">{{ $tour->title }}</h2>
             <p class="mb-4">
-               Experience Tanzania in style with a 4-day luxury safari through some of the country’s most iconic wildlife destinations—featuring world-class lodges, expert guides, and unforgettable game drives.
+              {{ $tour->description }}
             </p>
 
             <!-- INFO -->
@@ -66,21 +66,16 @@
                 <!-- TABS content -->
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="overview">
-                        <p>Begin your journey with a pickup from the airport or your hotel in Arusha. Drive to Tarangire National Park, known for its विशाल elephant herds and ancient baobab trees. Enjoy a luxury game drive with opportunities to spot elephants, lions, giraffes, and more. Overnight: Luxury lodge or tented camp in Tarangire Meals: Lunch & Dinner</p>
+                        <p>{!! $tour->overview !!}</p>
                     </div>
 
                     <div class="tab-pane fade" id="itinerary">
-                        <h4>Day 1: Arrival & Relaxation</h4>
-                        <p>Begin your journey with a pickup from the airport or your hotel in Arusha. Drive to Tarangire National Park, known for its विशाल elephant herds and ancient baobab trees. Enjoy a luxury game drive with opportunities to spot elephants, lions, giraffes, and more. Overnight: Luxury lodge or tented camp in Tarangire Meals: Lunch & Dinner</p>
+                        @foreach ( $tour->itinerary as $index => $item)
+<h4>{{ $item['title'] ?? '' }}</h4>
+                        <p>{{ $item['content'] ?? '' }}</p> 
+                        @endforeach
 
-                        <h4>Day 2: Serengeti National Park Adventure</h4>
-                        <p>After breakfast, travel to the world-famous Serengeti National Park via a scenic drive (or optional flight upgrade). Spend the afternoon on a game drive across the endless plains, home to the Big Five and the Great Migration (seasonal). Overnight: Luxury lodge/tented camp in Serengeti. Meals: Breakfast, Lunch & Dinner</p>
 
-                        <h4>Day 3: Full-Day Safari in Serengeti</h4>
-                        <p>Enjoy a full day exploring the Serengeti with morning and afternoon game drives. Witness predators in action, vast herds of wildlife, and breathtaking landscapes. Optional activities like a hot air balloon safari can elevate your experience. Overnight: Luxury lodge/tented camp in Serengeti Meals: Breakfast, Lunch & Dinner</p>
-
-                        <h4>Day 4: Ngorongoro Crater & Departure</h4>
-                        <p>Depart early for the spectacular Ngorongoro Crater, a UNESCO World Heritage Site and one of Africa’s best wildlife viewing areas. Descend into the crater for a final game drive, where you may spot rhinos, lions, flamingos, and more. After lunch, return to Arusha for drop-off at the airport or hotel. Meals: Breakfast & Lunch</p>
 
 
 

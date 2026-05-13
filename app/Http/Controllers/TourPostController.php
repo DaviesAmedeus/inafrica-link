@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\ParentCategory;
 use App\Models\Tour;
+use App\Models\TourPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -112,12 +113,30 @@ class TourPostController extends Controller
             $tour->meta_keywords = $request->meta_keywords;
             $tour->meta_description = $request->meta_description;
             $tour->visibility = $request->visibility;
-            $tour->save();
+            $savedTour = $tour->save();
 
-            return response()->json([
-                'status' => 1,
-                'message' => 'Tour created successfully'
-            ]);
+            if ($savedTour) {
+
+                foreach ($request->pricing as $item) {
+
+                    TourPrice::create([
+                        'tour_id' => $tour->id,
+                        'people' => $item['people'],
+                        'price' => $item['price']
+                    ]);
+                }
+
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Tour created successfully'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Something went wrong!'
+                ]);
+            }
         }
     }
 
@@ -132,7 +151,7 @@ class TourPostController extends Controller
 
     public function editTour(Request $request, $id = null)
     {
-        $tour = Tour::findOrFail($id);
+        $tour = Tour::with('tourPrices')->findOrFail($id);
 
         $tour->itinerary = json_decode($tour->itinerary, true);
 
@@ -253,6 +272,36 @@ class TourPostController extends Controller
         $saved = $tour->save();
 
         if ($saved) {
+
+
+            foreach ($request->pricing as $item) {
+
+                // EXISTING PRICE
+                if (!empty($item['id'])) {
+
+                    $tourPrice = TourPrice::findorFail($item['id']);
+
+                    if ($tourPrice) {
+
+                        $tourPrice->update([
+                            'people' => $item['people'],
+                            'price' => $item['price']
+                        ]);
+                    }
+                } else {
+
+                    // NEW PRICE
+                    TourPrice::create([
+                        'tour_id' => $tour->id,
+                        'people' => $item['people'],
+                        'price' => $item['price']
+                    ]);
+                }
+            }
+
+
+
+
             return response()->json(['status' => 1, 'message' => 'The tour was updated successfully!']);
         } else {
             return response()->json(['status' => 0, 'message' => 'Something went wrong while updating the blog post']);

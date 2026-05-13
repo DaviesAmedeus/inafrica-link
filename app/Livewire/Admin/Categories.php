@@ -20,7 +20,8 @@ class Categories extends Component
     public $selected_breadcrumb_img = null;
 
     protected $listeners = [
-        'deleteParentCategoryAction'
+        'deleteParentCategoryAction',
+        'deleteCategoryAction'
     ];
 
     /*-- START f(x)'s Dealing with P. Category -- */
@@ -109,12 +110,12 @@ class Categories extends Component
     {
         $pcategory = ParentCategory::findOrFail($id);
         // // Check if parent category has children
-        // if ($pcategory->children->count() > 0) {
-        //     foreach ($pcategory->children as $category) {
-        //         // Release a category
-        //         Category::where('id', $category->id)->update(['parent' => 0]);
-        //     }
-        // }
+        if ($pcategory->children->count() > 0) {
+            foreach ($pcategory->children as $category) {
+                // Release a category
+                Category::where('id', $category->id)->update(['parent' => 0]);
+            }
+        }
 
         // Delete parent category
         $delete = $pcategory->delete();
@@ -125,7 +126,31 @@ class Categories extends Component
         }
     }
 
-    /*-- END f(x)'s Dealing with P. Category -- */
+    public function deleteCategory($id)
+    {
+        $this->dispatch('deleteCategory', ['id' => $id]);
+    }
+
+
+
+    public function deleteCategoryAction($id)
+    {
+        $category = Category::findOrFail($id);
+        // Check if this category has related post(s)
+        if ($category->tours->count() > 0) {
+            $count = $category->tours->count();
+            $this->dispatch('showToastr', ['type' => 'error', 'message' => 'You cant delete this category. It has (' . $count . ') related post(s)']);
+        } else {
+            // Delete parent category
+            $delete = $category->delete();
+            if ($delete) {
+                $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Category has been deleted successfully']);
+            } else {
+                $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
+            }
+        }
+    }
+
 
 
 
@@ -211,9 +236,10 @@ class Categories extends Component
     public function updateCategory()
     {
         $category = Category::findOrFail($this->category_id);
+        $featured_image_name = $category->breadcrumb_img;
+
         $this->validate([
             'category_name' => 'required|unique:categories,name,' . $category->id,
-            'breadcrumb_img' => 'required|mimes:png,jpg,jpeg,webp|max:2048',
             'category_desc' => 'required',
         ], [
             'category_name.required' => 'Category field is required!',
@@ -222,6 +248,9 @@ class Categories extends Component
 
         // if form has image file
         if ($this->breadcrumb_img) {
+            $this->validate([
+                'breadcrumb_img' => 'mimes:png,jpg,jpeg|max:2048',
+            ]);
             $path = 'images/breadcrumb/';
             $old_breadcrumb_img = $category->breadcrumb_img;
             $file = $this->breadcrumb_img;
@@ -229,6 +258,7 @@ class Categories extends Component
 
             // upload breadcrumb_img into the folder
             $upload = $file->storeAs($path, $filename, 'public');
+
 
             if (!$upload) {
                 $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong while uploading s;ide image']);
@@ -239,21 +269,23 @@ class Categories extends Component
                     Storage::disk('public')->delete($path . basename($old_breadcrumb_img));
                 }
 
-                //  Updating the records in the database
-                $category->parent = $this->parent;
-                $category->name = $this->category_name;
-                $category->slug = null;
-                $category->category_desc = $this->category_desc;
-                $category->breadcrumb_img = $filename;
-                $saved = $category->save();
-
-                if ($saved) {
-                    $this->hideCategoryModalForm();
-                    $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Category Updated!']);
-                } else {
-                    $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
-                }
+                 $featured_image_name = $filename;
             }
+        }
+
+        //  Updating the records in the database
+        $category->parent = $this->parent;
+        $category->name = $this->category_name;
+        $category->slug = null;
+        $category->category_desc = $this->category_desc;
+        $category->breadcrumb_img =  $featured_image_name;
+        $saved = $category->save();
+
+        if ($saved) {
+            $this->hideCategoryModalForm();
+            $this->dispatch('showToastr', ['type' => 'success', 'message' => 'Category Updated!']);
+        } else {
+            $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
         }
     }
 

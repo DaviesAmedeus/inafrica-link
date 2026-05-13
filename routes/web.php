@@ -9,20 +9,20 @@ use Illuminate\Support\Facades\Route;
 /* STATIC ROUTES */
 
 Route::view('/',  'front.pages.index')->name('home');
-Route::view('/tour/3-day-luxury-safari',  'front.pages.single_tour')->name('single_tour');
+// Route::view('/tour/3-day-luxury-safari',  'front.pages.single_tour')->name('single_tour');
 
 /* ROUTES CONTROLLING THE TOURS */
 Route::controller(TourController::class)->group(function () {
     // displaying all TOURS associated with the selected category
     Route::get('/tours/category/{slug}', 'categoryTours')->name('category_tours');
+    Route::get('/tour/{slug}', 'readTour')->name('read_tour');
 });
 
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
-
-    Route::middleware(['guest'])->group(function () {
+    Route::middleware(['guest', 'preventBackHistory'])->group(function () {
         Route::controller(AuthController::class)->group(function () {
             Route::get('/login', 'loginForm')->name('login'); // This route displays the login form
             Route::post('/login', 'loginHandler')->name('login_handler'); // This route handles the login
@@ -35,25 +35,32 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
 
-    Route::middleware(['auth'])->group(function () {
-
+    Route::middleware(['auth', 'preventBackHistory'])->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/dashboard', 'adminDashboard')->name('dashboard');
             Route::post('/logout', 'logoutHandler')->name('logout'); // This route handles the logout process
-            // Route::get('/profile', 'profileView')->name('profile');
-            // Route::post('/update-profile-picture', 'updateProfilePicture')->name('update_profile_picture');
 
+            Route::get('/profile', 'profileView')->name('profile');
+            Route::post('/update-profile-picture', 'updateProfilePicture')->name('update_profile_picture');
 
-            Route::get('/categories', 'categoriesPage')->name('categories');
+            //Routes to only be accessed only by superAdmin
+            Route::middleware('onlySuperAdmin')->group(function () {
+                Route::get('/settings', 'generalSettings')->name('settings');
+                Route::post('/update-light-mode-logo', 'updateLightModeLogo')->name('update_light_mode_logo');
+                Route::post('/update-dark-mode-logo', 'updateDarkModeLogo')->name('update_dark_mode_logo');
+
+                Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
+                Route::get('/categories', 'categoriesPage')->name('categories');
+            });
         });
     });
 
 
-      Route::controller(TourPostController::class)->group(function () {
-            Route::get('/tour/new', 'addTour')->name('add_tour');
-            Route::post('/tour/create', 'createTour')->name('create_tour');
-            Route::get('/tours', 'allTours')->name('tours');
-            Route::get('/tour/{id}/edit', 'editTour')->name('edit_tour');
-            Route::post('/tour/update', 'updateTour')->name('update_tour');
-        });
+    Route::controller(TourPostController::class)->group(function () {
+        Route::get('/tour/new', 'addTour')->name('add_tour');
+        Route::post('/tour/create', 'createTour')->name('create_tour');
+        Route::get('/tours', 'allTours')->name('tours');
+        Route::get('/tour/{id}/edit', 'editTour')->name('edit_tour');
+        Route::post('/tour/update', 'updateTour')->name('update_tour');
+    });
 });

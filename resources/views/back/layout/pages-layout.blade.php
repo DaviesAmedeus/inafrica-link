@@ -9,7 +9,8 @@
 
 
     <!-- Site favicon -->
-    <link rel="icon" type="image/png" sizes="16x16" {{-- href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" /> --}}
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" />
     {{-- <!-- Mobile Specific Metas --> --}}
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
@@ -46,6 +47,7 @@
             <div class="menu-icon bi bi-list"></div>
             <div class="search-toggle-icon bi bi-search" data-toggle="header_search"></div>
             <div class="header-search">
+
                 <form>
                     <div class="form-group mb-0">
                         <i class="dw dw-search2 search-icon"></i>
@@ -90,25 +92,7 @@
                     </a>
                 </div>
             </div>
-            <div class="user-info-dropdown">
-        <div class="dropdown">
-            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                <span class="user-icon">
-                    <img src="" alt="" />
-                </span>
-                <span class="user-name">{{ Auth::user()->name}}</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                <a class="dropdown-item" href=""><i class="dw dw-user1"></i> Profile</a>
-                <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
-                <a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-                <a class="dropdown-item" href="{{ route('admin.logout') }}"
-                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i
-                        class="dw dw-logout"></i> Log Out</a>
-                <form action="{{ route('admin.logout') }}" id="logout-form" method="POST">@csrf</form>
-            </div>
-        </div>
-    </div>
+
             <div class="user-notification">
                 <div class="dropdown">
                     <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
@@ -183,7 +167,7 @@
                     </div>
                 </div>
             </div>
-            {{-- @livewire('admin.top-user-info') --}}
+            @livewire('admin.top-user-info')
             <div class="github-link">
                 <a href="https://github.com/dropways/deskapp" target="_blank"><img
                         src="{{ asset('back/vendors/images/github.svg') }}" alt="" /></a>
@@ -289,8 +273,10 @@
     <div class="left-side-bar">
         <div class="brand-logo">
             <a href="/">
-                <img src="{{ asset('front/assets/img/inafrica-weblogo.png') }}" alt="" class="dark-logo site_logo" />
-                <img src="{{ asset('front/assets/img/inafrica-weblogo-white.png') }}" alt="" class="light-logo site_logo" />
+                <img src="/images/site/{{ isset(settings()->site_light_mode_logo) ? settings()->site_light_mode_logo : '' }}"
+                    alt="" class="dark-logo site_logo" />
+                <img src="/images/site/{{ isset(settings()->site_dark_mode_logo) ? settings()->site_dark_mode_logo : '' }}"
+                    alt="" class="light-logo site_logo" />
             </a>
             <div class="close-sidebar" data-toggle="left-sidebar-close">
                 <i class="ion-close-round"></i>
@@ -305,37 +291,53 @@
                             <span class="micon fa fa-home"></span><span class="mtext">Home</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('admin.categories') }}" class="dropdown-toggle no-arrow {{ Route::is('admin.categories') ? 'active' : '' }}">
-                            <span class="micon fa fa-th-list"></span><span class="mtext">Tour Categories</span>
+
+                    @if (auth()->user()->type == 'superAdmin')
+                        <li>
+                            <a href="{{ route('admin.categories') }}"
+                                class="dropdown-toggle no-arrow {{ Route::is('admin.categories') ? 'active' : '' }}">
+                                <span class="micon fa fa-th-list"></span><span class="mtext">Tour Categories</span>
+                            </a>
+                        </li>
+
+                         <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <span class="micon fa fa-money"></span><span class="mtext">Tour Prices</span>
                         </a>
+                        <ul class="submenu">
+                            <li><a href="">Add Price</a></li>
+                            <li><a href="">Price List</a></li>
+
+                        </ul>
                     </li>
+                    @endif
 
                     <li class="dropdown">
-                        <a href="javascript:;" class="dropdown-toggle {{ Route::is('admin.add_post') || Route::is('admin.posts') || Route::is('admin.edit_post') ? 'active' : '' }}">
+                        <a href="javascript:;"
+                            class="dropdown-toggle {{ Route::is('admin.add_post') || Route::is('admin.posts') || Route::is('admin.edit_post') ? 'active' : '' }}">
                             <span class="micon fa fa-car"></span><span class="mtext"> Tours </span>
                         </a>
                         <ul class="submenu">
-                            <li><a href="{{ route('admin.add_tour') }}" class="{{ Route::is('admin.add_tour') ? 'active' : '' }}">New</a></li>
-                            <li><a href="{{ route('admin.tours') }}" class="{{ Route::is('admin.tours') ? 'active' : '' }}">Tours</a></li>
+                            <li><a href="{{ route('admin.add_tour') }}"
+                                    class="{{ Route::is('admin.add_tour') ? 'active' : '' }}">Add Tour +</a></li>
+                            <li><a href="{{ route('admin.tours') }}"
+                                    class="{{ Route::is('admin.tours') ? 'active' : '' }}">Tours List</a></li>
 
                         </ul>
                     </li>
-                    <li class="dropdown">
-                        <a href="javascript:;" class="dropdown-toggle">
-                            <span class="micon fa fa-shopping-bag"></span><span class="mtext">Shop</span>
-                        </a>
-                        <ul class="submenu">
-                            <li><a href="">New product</a></li>
-                            <li><a href="">All products</a></li>
 
-                        </ul>
+
+
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Subscriptions</span>
+                        </a>
                     </li>
 
 
                     <li>
-                        <a href="invoice.html" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
+                        <a href="{{ route('admin.dashboard') }}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-image"></span><span class="mtext">Gallery</span>
                         </a>
                     </li>
                     <li>
@@ -346,22 +348,37 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-toggle no-arrow" href="">
+                        <a class="dropdown-toggle no-arrow {{ Route::is('admin.profile') ? 'active' : '' }}"
+                            href="{{ route('admin.profile') }}">
                             <span class="micon fa fa-user-circle"></span>
                             <span class="mtext">Profile
                             </span>
                         </a>
                     </li>
 
+                    @if (auth()->user()->type == 'superAdmin')
+                        <li class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle">
+                                <span class="micon fa fa-users"></span><span class="mtext">Manage Users</span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="{{ route('admin.dashboard') }}">Add User +</a></li>
+                                <li><a href="{{ route('admin.dashboard') }}">User Roles</a></li>
 
-                    <li>
-                        <a class="dropdown-toggle no-arrow" href="">
-                            </span>
-                            <span class="micon fa fa-cogs"></span>
-                            <span class="mtext">General
-                            </span>
-                        </a>
-                    </li>
+                            </ul>
+                        </li>
+                    @endif
+
+
+
+                     <li>
+                            <a class="dropdown-toggle no-arrow {{ Route::is('admin.settings') ? 'active' : '' }}"
+                                href="{{ route('admin.settings') }}"></span>
+                                <span class="micon fa fa-cogs"></span>
+                                <span class="mtext">General
+                                </span>
+                            </a>
+                        </li>
 
                     <li>
                         <a class="dropdown-toggle no-arrow" href="">
@@ -371,6 +388,8 @@
                             </span>
                         </a>
                     </li>
+
+
 
                 </ul>
             </div>
@@ -388,8 +407,8 @@
                 </div>
             </div>
             <div class="footer-wrap pd-20 mb-20 card-box">
-                &copy; {{ date('Y') }}
-                <a href="https://github.com/dropways" target="_blank">(koda.koda-Davies Amedeus)</a>
+                &copy; {{ date('Y') }} -
+                <a href="https://daviesamedeus.github.io/portfolio/" target="_blank">Davies Amedeus </a>from  KODA TECHNOLOGIES
             </div>
         </div>
     </div>

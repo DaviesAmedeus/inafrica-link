@@ -13,6 +13,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600&family=Roboto&display=swap" rel="stylesheet">
 
+     <!-- Site favicon -->
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" />
+
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -41,14 +45,37 @@
         </div>
         <!-- Spinner End -->
 
+        <!-- Topbar Start -->
+        {{-- @auth
+ <div class="container-fluid bg-primary px-2 d-none d-lg-block">
+            <div class="row gx-0 justify-content-end">
+
+                <div class="col-lg-4 align-self-center">
+                    <div class="d-inline-flex align-items-center" style="height: 45px;">
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown"><small><i class="fa fa-home me-2"></i>Admin</small></a>
+                            <div class="dropdown-menu rounded">
+                                <a href="{{ route('admin.dashboard') }}" class="dropdown-item"><i class="fas fa-user-alt me-2"></i>Dashboard</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i> Settings</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-power-off me-2"></i> Log Out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         @endauth --}}
+
+        <!-- Topbar End -->
+
 
         <!-- Navbar & Hero Start -->
         <div class="container-fluid position-relative p-0">
             <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0"
                 style="background-color: rgb(255, 255, 255); color: white">
-                <a href="" class="navbar-brand p-0">
-                   
-                    <img src="{{ asset('front/assets/img/inafrica-weblogo.png') }}" alt="Logo">
+                <a href="/" class="navbar-brand p-0">
+
+                    <img src="/images/site/{{ isset(settings()->site_light_mode_logo) ? settings()->site_light_mode_logo : '' }}" alt="Logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
@@ -57,7 +84,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
                         <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
-                          {!! navigations() !!}
+                        {!! navigations() !!}
 
 
                         <div class="nav-item dropdown">
@@ -71,6 +98,21 @@
                             </div>
 
                         </div>
+                        @auth
+                            <div class="nav-item dropdown" style="background-color: green;">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Admin Panel</a>
+
+                                <div class="dropdown-menu m-0">
+                                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item">Dashboard</a>
+                                    <a href="{{ route('admin.logout') }}"
+                                        onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                                        class="dropdown-item">Logout</a>
+                                    <form action="{{ route('admin.logout') }}" id="logout-form" method="POST">@csrf</form>
+                                </div>
+
+                            </div>
+                        @endauth
+
                     </div>
                     <a href="#" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-4">Plan Your Trip</a>
                 </div>
