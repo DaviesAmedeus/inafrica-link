@@ -16,7 +16,7 @@ class TourController extends Controller
         // Retrieve posts related to this category and paginate
         $tours = Tour::where('category', $category->id)
             ->where('visibility', 1)
-            ->paginate(8);
+            ->latest()->paginate(8);
 
         $title = 'Posts in Category' . $category->name;
         $description = 'Browse the latest posts in the ' . $category->name . ' category. Stay updated!';

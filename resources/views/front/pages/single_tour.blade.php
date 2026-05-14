@@ -72,7 +72,7 @@
                     <div class="tab-pane fade" id="itinerary">
                         @foreach ( $tour->itinerary as $index => $item)
 <h4>{{ $item['title'] ?? '' }}</h4>
-                        <p>{{ $item['content'] ?? '' }}</p> 
+                        <p>{{ $item['content'] ?? '' }}</p>
                         @endforeach
 
 
@@ -112,23 +112,21 @@
             <div class="card shadow-sm booking-card p-4">
                 <h4 class="mb-4">Book This Tour</h4>
 
+               @forelse ( $tour->tourPrices as $price)
                 <div class="price-box">
-                    <p>1 Adult</p>
-                    <h5>$350</h5>
+                    <p>{{ $price->people }} Adult</p>
+                    <h5>{{ $price->price }} USD/<span>person</span></h5>
                     <a href="booking.html" class="btn btn-primary w-100">Book Now</a>
                 </div>
 
+               @empty
                 <div class="price-box">
-                    <p>2-4 Adults</p>
-                    <h5>$500</h5>
-                    <a href="booking.html" class="btn btn-primary w-100">Book Now</a>
+
+                    <a class="btn btn-primary w-100">Not Priced Yet</a>
                 </div>
 
-                <div class="price-box">
-                    <p>5-50 Adults</p>
-                    <h5>$1000</h5>
-                    <a href="booking.html" class="btn btn-primary w-100">Book Now</a>
-                </div>
+               @endforelse
+
 
             </div>
 
