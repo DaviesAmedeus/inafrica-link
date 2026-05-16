@@ -34,7 +34,6 @@ class TourController extends Controller
     {
         // fetch single post by slug
         $tour = Tour::where('slug', $slug)->firstOrFail();
-        $tour->itinerary = json_decode($tour->itinerary, true);
 
 
         // Get related tourss
@@ -54,6 +53,8 @@ class TourController extends Controller
             ->where('visibility', 1)
             ->orderBy('id', 'desc')
             ->first();
+
+
 
         // Set SEO Meta Tags
         $title = $tour->title;

@@ -53,4 +53,11 @@ class Tour extends Model
             $query->where('title', 'like', $term);
         });
     }
+
+
+protected $casts = [
+    'itinerary' => 'array',
+];
+
+
 }

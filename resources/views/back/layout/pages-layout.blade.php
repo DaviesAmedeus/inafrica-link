@@ -299,17 +299,6 @@
                                 <span class="micon fa fa-th-list"></span><span class="mtext">Tour Categories</span>
                             </a>
                         </li>
-
-                         <li class="dropdown">
-                        <a href="javascript:;" class="dropdown-toggle">
-                            <span class="micon fa fa-money"></span><span class="mtext">Tour Prices</span>
-                        </a>
-                        <ul class="submenu">
-                            <li><a href="">Add Price</a></li>
-                            <li><a href="">Price List</a></li>
-
-                        </ul>
-                    </li>
                     @endif
 
                     <li class="dropdown">
@@ -319,12 +308,25 @@
                         </a>
                         <ul class="submenu">
                             <li><a href="{{ route('admin.add_tour') }}"
-                                    class="{{ Route::is('admin.add_tour') ? 'active' : '' }}">Add Tour +</a></li>
+                                    class="{{ Route::is('admin.add_tour') ? 'active' : '' }}">Book Tour+</a></li>
                             <li><a href="{{ route('admin.tours') }}"
-                                    class="{{ Route::is('admin.tours') ? 'active' : '' }}">Tours List</a></li>
+                                    class="{{ Route::is('admin.tours') ? 'active' : '' }}">Booking List</a></li>
 
                         </ul>
                     </li>
+
+
+                       <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <span class="micon fa fa-money"></span><span class="mtext">Bookings</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="">Add Price</a></li>
+                            <li><a href="">Price List</a></li>
+
+                        </ul>
+                    </li>
+
 
 
 

@@ -153,7 +153,6 @@ class TourPostController extends Controller
     {
         $tour = Tour::with('tourPrices')->findOrFail($id);
 
-        $tour->itinerary = json_decode($tour->itinerary, true);
 
         // dd($tour);
 

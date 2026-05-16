@@ -1,5 +1,6 @@
 <div>
     <div class="row mb-4">
+
         <div class="col-12">
             <div class="pd-20 card-box p-5">
                 <div class="clearFix">
@@ -119,6 +120,7 @@
                 </div> --}}
             </div>
         </div>
+
         <div>
 
             {{-- MODALS --}}
@@ -212,7 +214,7 @@
                                     <span class="text-danger ml-1">{{ $message }}</span>
                                 @enderror
                             </div>
-                            
+
                             @if ($selected_breadcrumb_img)
                                 <div class="d-block" style="max-width: 200px;">
                                     <img src="{{ asset('storage/' . $selected_breadcrumb_img) }}" alt=""
@@ -245,3 +247,6 @@
 
 
         </div>
+
+    </div>
+</div>

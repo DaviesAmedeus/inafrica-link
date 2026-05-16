@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tour_prices', function (Blueprint $table) {
             $table->id();
-            $table->integer('tour_id'); // TOUR RELATION
+            $table->foreignId('tour_id')->constrained()->cascadeOnDelete(); // TOUR RELATION
             $table->integer('people');            // NUMBER OF PEOPLE
             $table->decimal('price', 10, 2);  // PRICE
             $table->timestamps();

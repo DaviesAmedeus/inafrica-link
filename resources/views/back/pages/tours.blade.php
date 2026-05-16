@@ -31,6 +31,13 @@
 
 @push('scripts')
     <script>
+         window.addEventListener('openPriceModal', function() {
+            $('#price_modal').modal('show');
+        });
+
+
+
+
         window.addEventListener('deleteTour', function(event) {
             var id = event.detail[0].id;
             // ijabo paks confirmation model

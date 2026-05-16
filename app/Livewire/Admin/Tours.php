@@ -14,7 +14,7 @@ class Tours extends Component
 {
     use WithPagination;
 
-    public $perPage = 10;
+    public $perPage = 8;
     public $categories_html;
 
     // filter properties
@@ -25,12 +25,16 @@ class Tours extends Component
     public $sortBy = 'desc';
     public $post_visibility;
 
+    //View Tour Price propersties
+    public $showPriceModal;
+    public $selectedTour = null;
+    public $selectedPrices = [];
+
+
+
     protected $listeners = [
         'deleteTourAction'
     ];
-
-
-
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -40,7 +44,7 @@ class Tours extends Component
         'sortBy' => ['except' => '']
     ];
 
-    // Resets the page when search value is updated
+    // Resets the page when search value is updated --
     public function updatedSearch()
     {
         $this->resetPage();
@@ -61,46 +65,14 @@ class Tours extends Component
     }
 
 
-    public function mount()
+    //Showing Prices for a single tour
+    public function showPrices($tourId)
     {
-
-        $this->author = Auth::user()->type == "superAdmin" ? Auth::user()->id : '';
-        $this->post_visibility = $this->visibility == 'public' ? 1 : 0;
-
-        // prepare categories selection
-        $categories_html = '';
-
-        $pcategories = ParentCategory::whereHas('children', function ($q) {
-            $q->whereHas('tours');
-        })->orderBy('name', 'asc')->get();
-
-        $categories = Category::whereHas('tours')
-            ->where('parent', 0)
-            ->orderBy('name', 'asc')
-            ->get();
-
-        if ($pcategories->count() > 0) {
-            foreach ($pcategories as $item) {
-                $categories_html .= '<optgroup label="' . $item->name . '">';
-
-                foreach ($item->children as $category) {
-                    if ($category->tours->count() > 0) {
-                        $categories_html .= '<option value="' . $category->id . '">' . $category->name . '</option>';
-                    }
-                }
-
-                $categories_html .= '</optgroup>';
-            }
-        }
-
-        if ($categories->count() > 0) {
-            foreach ($categories as $item) {
-                $categories_html .= '<option value="' . $item->id . '">' . $item->name . '</option>';
-            }
-        }
-
-
-        $this->categories_html = $categories_html;
+        $tour = Tour::with('tourPrices')->findOrFail($tourId);
+        $this->selectedTour = $tour;
+        $this->selectedPrices = $tour->tourPrices;
+        $this->showPriceModal = true;
+        $this->dispatch('openPriceModal');
     }
 
 
@@ -140,6 +112,50 @@ class Tours extends Component
             $this->dispatch('showToastr', ['type' => 'error', 'message' => 'Something went wrong!']);
         }
     }
+
+
+
+
+    public function mount()
+    {
+
+        $this->author = Auth::user()->type == "superAdmin" ? Auth::user()->id : '';
+        $this->post_visibility = $this->visibility == 'public' ? 1 : 0;
+
+        // prepare categories selection
+        $categories_html = '';
+
+        $pcategories = ParentCategory::whereHas('children', function ($q) {
+            $q->whereHas('tours');
+        })->orderBy('name', 'asc')->get();
+
+        $categories = Category::whereHas('tours')
+            ->where('parent', 0)
+            ->orderBy('name', 'asc')
+            ->get();
+
+        if ($pcategories->count() > 0) {
+            foreach ($pcategories as $item) {
+                $categories_html .= '<optgroup label="' . $item->name . '">';
+
+                foreach ($item->children as $category) {
+                    if ($category->tours->count() > 0) {
+                        $categories_html .= '<option value="' . $category->id . '">' . $category->name . '</option>';
+                    }
+                }
+
+                $categories_html .= '</optgroup>';
+            }
+        }
+
+        if ($categories->count() > 0) {
+            foreach ($categories as $item) {
+                $categories_html .= '<option value="' . $item->id . '">' . $item->name . '</option>';
+            }
+        }
+        $this->categories_html = $categories_html;
+    }
+
 
 
     public function render()

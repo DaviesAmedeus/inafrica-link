@@ -1,18 +1,16 @@
-
 /***DAVIES CUSTOM STYLES START ***/
 
 
 /*** Custom In-Africa Link Font ***/
 @font-face {
     font-family: 'Forte';
-    src: url('../fonts/Forte.otf')
-format('truetype');
+    src: url('../fonts/Forte.otf') format('truetype');
     font-weight: normal;
     font-style: normal;
 
 }
 
-h1{
+h1 {
     font-family: 'Forte', cursive;
     color: #C17817;
 }
@@ -24,7 +22,7 @@ h1{
 
 /*** Overiding the bootstrap --bs-primary ***/
 :root {
-  --bs-primary: #C17817;
+    --bs-primary: #C17817;
 }
 
 .btn-primary {
@@ -39,8 +37,10 @@ h1{
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    background-color: #C17817;  /* your color */
-    border-radius: 50%;          /* make it circular */
+    background-color: #C17817;
+    /* your color */
+    border-radius: 50%;
+    /* make it circular */
     width: 50px;
     height: 50px;
     background-size: 60% 60%;
@@ -49,8 +49,10 @@ h1{
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    background-color: #C17817;  /* your color */
-    border-radius: 50%;          /* make it circular */
+    background-color: #C17817;
+    /* your color */
+    border-radius: 50%;
+    /* make it circular */
     width: 50px;
     height: 50px;
     background-size: 60% 60%;
@@ -65,67 +67,94 @@ h1{
 }
 
 
-.service-icon i{
-    color:  #C17817;
+.service-icon i {
+    color: #C17817;
 }
 
 
 /*** Tour listing style ***/
 .bg-text-button {
-background-color: #C17817;
+    background-color: #C17817;
 }
 
-.text-btn:hover{
+.text-btn:hover {
     color: #0d6efd;
 }
 
 
 /* Single Tour Styles */
- /* INFO CARDS */
-        .tour-info .info-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #eee;
-            transition: 0.3s;
-        }
+/* INFO CARDS */
+.tour-info .info-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    transition: 0.3s;
+}
 
-        .tour-info .info-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+.tour-info .info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
 
-        .tour-info i {
-            font-size: 26px;
-            color: var(--bs-primary);
-            margin-bottom: 10px;
-        }
+.tour-info i {
+    font-size: 26px;
+    color: var(--bs-primary);
+    margin-bottom: 10px;
+}
 
-        /* TABS */
-        .tour-tabs {
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            border: 1px solid #eee;
-        }
+/* TABS */
+.tour-tabs {
+    background: #fff;
+    padding: 25px;
+    /* border-radius: 10px; */
+    border-bottom: 1px solid #eee;
+}
 
-        /* BOOKING */
-        .booking-card {
-            border-radius: 10px;
-        }
+/* BOOKING */
+.booking-card {
+    border-radius: 10px;
+}
 
-        .price-box {
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
-        }
+.price-box {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
 
-        .price-box:last-child {
-            border-bottom: none;
-        }
+.price-box:last-child {
+    border-bottom: none;
+}
 
-        .price-box h5 {
-            color: var(--bs-primary);
-        }
+.price-box h5 {
+    color: var(--bs-primary);
+}
+
+
+
+.tour-tabs .nav-link {
+    color: #333;
+    border-radius: 30px;
+    transition: 0.5s ease;
+}
+
+.tour-tabs .nav-link:hover {
+    color: #C17817;
+}
+
+.tour-tabs .nav-link.active {
+    background-color: #C17817 !important;
+    color: #fff !important;
+}
+
+/* itinerary styling */
+.tour-line {
+    border-left: 3px solid #C17817;
+}
+
+.tour-badge {
+    background: #C17817;
+    color: #fff;
+}
 
 
 
@@ -147,6 +176,7 @@ background-color: #C17817;
     visibility: visible;
     opacity: 1;
 }
+
 /*** Spinner End ***/
 
 .back-to-top {
@@ -283,6 +313,7 @@ background-color: #C17817;
         display: none;
     }
 }
+
 /*** Topbar End ***/
 
 
@@ -390,7 +421,7 @@ background-color: #C17817;
     }
 
     .navbar-light .navbar-nav .nav-link:hover,
-    .navbar-light .navbar-nav .nav-link.active  {
+    .navbar-light .navbar-nav .nav-link.active {
         color: var(--bs-primary) !important;
     }
 
@@ -488,7 +519,7 @@ background-color: #C17817;
     object-fit: cover;
 }
 
-.carousel-header .carousel-inner .carousel-item .carousel-caption  {
+.carousel-header .carousel-inner .carousel-item .carousel-caption {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -504,6 +535,7 @@ background-color: #C17817;
 }
 
 @media (max-width: 768px) {
+
     .carousel-header .carousel-inner .carousel-item img,
     .carousel-header .carousel-inner .carousel-item .carousel-caption {
         height: 700px;
@@ -524,6 +556,7 @@ background-color: #C17817;
         transition: 0.5s;
     }
 }
+
 /*** Carousel Hero Header End ***/
 
 
@@ -539,6 +572,7 @@ background-color: #C17817;
 .bg-breadcrumb .breadcrumb-item a {
     color: var(--bs-secondary) !important;
 }
+
 /*** Single Page Hero Header End ***/
 
 
@@ -560,6 +594,7 @@ background-color: #C17817;
     margin-right: -50px;
     border: 1px solid var(--bs-primary) !important;
 }
+
 /*** About End ***/
 
 
@@ -567,6 +602,7 @@ background-color: #C17817;
 .service .service-content-inner {
     transition: 0.5s;
 }
+
 .service .service-content-inner:hover {
     position: relative;
     background: var(--bs-primary) !important;
@@ -583,6 +619,7 @@ background-color: #C17817;
 .service .service-content-inner:hover .service-icon i {
     color: var(--bs-white) !important;
 }
+
 /*** Service End ***/
 
 
@@ -625,6 +662,7 @@ background-color: #C17817;
 .destination .tab-class .nav-item {
     padding: 0 0 20px 0;
 }
+
 .destination .tab-class .nav-item a.active {
     background: var(--bs-primary) !important;
 }
@@ -652,6 +690,7 @@ background-color: #C17817;
 .destination .tab-class .tab-content .destination-img:hover img {
     transform: scale(1.2);
 }
+
 /*** Destination End ***/
 
 
@@ -778,6 +817,7 @@ background-color: #C17817;
 .packages .packages-carousel .owl-nav .owl-next:hover i {
     color: var(--bs-white);
 }
+
 /*** Packages End ***/
 
 
@@ -785,6 +825,7 @@ background-color: #C17817;
 .ExploreTour .tab-class .nav-item {
     padding: 0 0 20px 0;
 }
+
 .ExploreTour .tab-class .nav-item a.active {
     background: var(--bs-primary) !important;
 }
@@ -947,6 +988,7 @@ background-color: #C17817;
     width: 40px;
     background: var(--bs-primary);
 }
+
 /*** Explore Tour End ***/
 
 
@@ -995,8 +1037,8 @@ background-color: #C17817;
 
 .gallery .gallery-item:hover .gallery-content .gallery-info,
 .gallery .gallery-item:hover .gallery-plus-icon {
-   opacity: 1;
-   margin: 0;
+    opacity: 1;
+    margin: 0;
 }
 
 .gallery .gallery-item img {
@@ -1014,6 +1056,7 @@ background-color: #C17817;
 .gallery .tab-class .nav-item {
     padding: 0 0 20px 0;
 }
+
 .gallery .tab-class .nav-item a.active {
     background: var(--bs-primary) !important;
 }
@@ -1026,7 +1069,7 @@ background-color: #C17817;
 
 /*** Tour Booking Start ***/
 .booking {
-    background: linear-gradient(rgb(193,120,23), rgba(19, 53, 123, .8)), url(../img/touring.png);
+    background: linear-gradient(rgb(193, 120, 23), rgba(19, 53, 123, .8)), url(../img/touring.png);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1111,6 +1154,7 @@ background-color: #C17817;
 .guide .guide-item .guide-img-efects img {
     transition: 0.5s;
 }
+
 .guide .guide-item:hover .guide-img-efects img {
     transform: scale(1.1);
 }
@@ -1153,6 +1197,7 @@ background-color: #C17817;
 .guide .guide-item:hover .guide-title .guide-title-inner h4 {
     color: var(--bs-white);
 }
+
 /*** Travel Guide End ***/
 
 
@@ -1221,6 +1266,7 @@ background-color: #C17817;
 .blog .blog-item .blog-img:hover .blog-img-inner img {
     transform: scale(1.2);
 }
+
 /*** Blog End ***/
 
 /*** Testimonial Start ***/
@@ -1232,7 +1278,8 @@ background-color: #C17817;
     position: relative;
     width: 100px;
     height: 100px;
-    top: 0; left: 50%;
+    top: 0;
+    left: 50%;
     transform: translate(-50%, -50%);
     border: 3px solid var(--bs-primary);
     border-style: dotted;
@@ -1311,6 +1358,7 @@ background-color: #C17817;
     border-style: dotted;
     transition: 0.5s;
 }
+
 /*** Testimonial End ***/
 
 /*** Contact Start ***/
@@ -1322,6 +1370,7 @@ background-color: #C17817;
     box-shadow: inset 1000px 0 0 0 var(--bs-light) !important;
     color: var(--bs-primary) !important;
 }
+
 /*** Contact End ***/
 
 /*** Subscribe Start ***/
@@ -1361,12 +1410,14 @@ background-color: #C17817;
     margin-left: -50px;
     border: 1px solid var(--bs-white) !important;
 }
+
 /*** Subscribe End ***/
 
 /*** Footer Start ***/
 .footer {
     background: var(--bs-dark);
 }
+
 .footer .footer-item a {
     line-height: 30px;
     color: var(--bs-white);
@@ -1385,6 +1436,7 @@ background-color: #C17817;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     background: var(--bs-dark) !important;
 }
+
 /*** copyright end ***/
 
 
@@ -1412,13 +1464,13 @@ background-color: #C17817;
 
 .info-box i {
     font-size: 28px;
-    color:  #C17817;
+    color: #C17817;
     margin-bottom: 10px;
 }
 
 .info-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* TABS */
