@@ -2,24 +2,30 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TourPostController;
 use Illuminate\Support\Facades\Route;
 
-/* STATIC ROUTES */
 
-Route::view('/',  'front.pages.index')->name('home');
-// Route::view('/tour/3-day-luxury-safari',  'front.pages.single_tour')->name('single_tour');
 
-/* ROUTES CONTROLLING THE TOURS */
+
+/* --- STATIC ROUTES --- */
+Route::controller(HomeController::class)->group(function(){
+    Route::get('/', 'index')->name('home');
+    //Route::get('/about', 'about')->name('about'); //page not yet created
+});
+
+
+/* --- ROUTES CONTROLLING THE TOURS --- */
 Route::controller(TourController::class)->group(function () {
-    // displaying all TOURS associated with the selected category
-    Route::get('/tours/category/{slug}', 'categoryTours')->name('category_tours');
+    Route::get('/tours/category/{slug}', 'categoryTours')->name('category_tours'); //display selected category tours
     Route::get('/tour/{slug}', 'readTour')->name('read_tour');
 });
 
 
 
+/* --- ADMIN ROUTES --- */
 Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['guest', 'preventBackHistory'])->group(function () {
@@ -55,7 +61,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 
-
+    // Tour CRUD routes
     Route::controller(TourPostController::class)->group(function () {
         Route::get('/tour/new', 'addTour')->name('add_tour');
         Route::post('/tour/create', 'createTour')->name('create_tour');

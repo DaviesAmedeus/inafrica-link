@@ -1,5 +1,7 @@
 @extends('front.layout.pages-layout')
-@section('pageTitle', isset($pageTitle) ? $pageTitle : 'Document title')
+@section('meta_tags')
+{!! SEO::generate() !!}
+@endsection
 @section('breadcrumb-section')
     <!-- Breadcrumb Start -->
     <x-front.breadcrumb img_link="storage/images/tours/{{ $tour->breadcrumb_img_tour }}">

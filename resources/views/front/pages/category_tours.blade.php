@@ -1,5 +1,9 @@
 @extends('front.layout.pages-layout')
-@section('pageTitle', isset($category->name) ? $category->name : 'Document title')
+@section('content')
+@section('meta_tags')
+    {!! SEO::generate() !!}
+@endsection
+
 @section('breadcrumb-section')
     <!-- Breadcrumb Start -->
     <x-front.breadcrumb img_link="storage/images/breadcrumb/{{$category->breadcrumb_img}}">{{ $category->name }}</x-front.breadcrumb>
@@ -40,9 +44,9 @@
                         <div class="col-6 text-start px-0">
                             <a href="{{ route('read_tour',$tour->slug) }}" class="btn-hover  btn text-white py-2 px-4">Read More...</a>
                         </div>
-                        <div class="col-6 text-end px-0">
+                        {{-- <div class="col-6 text-end px-0">
                             <a href="#" class="btn-hover btn text-white py-2 px-4">Book Now!</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 @endforeach

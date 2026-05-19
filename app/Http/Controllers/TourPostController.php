@@ -107,7 +107,7 @@ class TourPostController extends Controller
             $tour->title = $request->title;
             $tour->description = $request->description;
             $tour->overview = $request->overview;
-            $tour->itinerary = json_encode($request->itinerary);
+            $tour->itinerary = $request->itinerary;
             $tour->breadcrumb_img_tour = $filename;
             $tour->tags = $request->tags;
             $tour->meta_keywords = $request->meta_keywords;
@@ -200,7 +200,7 @@ class TourPostController extends Controller
             'overview' => 'required',
             'category' => 'required|exists:categories,id',
             'featured_image' => 'nullable|mimes:jpeg,jpg,png|max:2050',
-            'itinerary' => 'required|array',
+            'itinerary' => 'array',
             'itinerary.*.title' => 'required|string|max:255',
             'itinerary.*.content' => 'required|string',
         ]);
@@ -262,7 +262,7 @@ class TourPostController extends Controller
         $tour->slug = null;
         $tour->description = $request->description;
         $tour->overview = $request->overview;
-        $tour->itinerary = json_encode($request->itinerary);
+        $tour->itinerary = $request->itinerary;
         $tour->breadcrumb_img_tour = $featured_image_name;
         $tour->tags = $request->tags;
         $tour->meta_keywords = $request->meta_keywords;

@@ -1,5 +1,9 @@
 @extends('front.layout.pages-layout')
 @section('pageTitle', isset($pageTitle) ? $pageTitle : 'Document title')
+@section('meta_tags')
+    {!! SEO::generate() !!}
+@endsection
+
 @section('breadcrumb-section')
     <!-- Carousel Start -->
     <div class="carousel-header">
@@ -74,11 +78,9 @@
     </div>
     <!-- Carousel End -->
 @endsection
+
+
 @section('content')
-
-
-
-
     <!-- About Start -->
     <div class="container-fluid about pt-5">
         <div class="container pb-3">
@@ -480,8 +482,9 @@
                                     </div>
                                 </div>
                                 <div class="gallery-plus-icon">
-                                    <a href="{{ asset('front/assets/img/gallery/gallery1.jpg') }}" data-lightbox="gallery-1"
-                                        class="my-auto"><i class="fas fa-plus fa-2x text-white"></i></a>
+                                    <a href="{{ asset('front/assets/img/gallery/gallery1.jpg') }}"
+                                        data-lightbox="gallery-1" class="my-auto"><i
+                                            class="fas fa-plus fa-2x text-white"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -497,8 +500,9 @@
                                     </div>
                                 </div>
                                 <div class="gallery-plus-icon">
-                                    <a href="{{ asset('front/assets/img/gallery/gallery2.jpeg') }}" data-lightbox="gallery-1"
-                                        class="my-auto"><i class="fas fa-plus fa-2x text-white"></i></a>
+                                    <a href="{{ asset('front/assets/img/gallery/gallery2.jpeg') }}"
+                                        data-lightbox="gallery-1" class="my-auto"><i
+                                            class="fas fa-plus fa-2x text-white"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -514,8 +518,9 @@
                                     </div>
                                 </div>
                                 <div class="gallery-plus-icon">
-                                    <a href="{{ asset('front/assets/img/gallery/gallery3.png') }}" data-lightbox="gallery-1"
-                                        class="my-auto"><i class="fas fa-plus fa-2x text-white"></i></a>
+                                    <a href="{{ asset('front/assets/img/gallery/gallery3.png') }}"
+                                        data-lightbox="gallery-1" class="my-auto"><i
+                                            class="fas fa-plus fa-2x text-white"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -531,8 +536,9 @@
                                     </div>
                                 </div>
                                 <div class="gallery-plus-icon">
-                                    <a href="{{ asset('front/assets/img/gallery/gallery4.jpeg') }}" data-lightbox="gallery-1"
-                                        class="my-auto"><i class="fas fa-plus fa-2x text-white"></i></a>
+                                    <a href="{{ asset('front/assets/img/gallery/gallery4.jpeg') }}"
+                                        data-lightbox="gallery-1" class="my-auto"><i
+                                            class="fas fa-plus fa-2x text-white"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -548,8 +554,9 @@
                                     </div>
                                 </div>
                                 <div class="gallery-plus-icon">
-                                    <a href="{{ asset('front/assets/img/gallery/gallery5.png') }}" data-lightbox="gallery-1"
-                                        class="my-auto"><i class="fas fa-plus fa-2x text-white"></i></a>
+                                    <a href="{{ asset('front/assets/img/gallery/gallery5.png') }}"
+                                        data-lightbox="gallery-1" class="my-auto"><i
+                                            class="fas fa-plus fa-2x text-white"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -565,8 +572,9 @@
                                     </div>
                                 </div>
                                 <div class="gallery-plus-icon">
-                                    <a href="{{ asset('front/assets/img/gallery/gallery6.png') }}" data-lightbox="gallery-1"
-                                        class="my-auto"><i class="fas fa-plus fa-2x text-white"></i></a>
+                                    <a href="{{ asset('front/assets/img/gallery/gallery6.png') }}"
+                                        data-lightbox="gallery-1" class="my-auto"><i
+                                            class="fas fa-plus fa-2x text-white"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -636,7 +644,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="row g-4">
-                         <div class="col-12">
+                        <div class="col-12">
                             <div
                                 class="service-content-inner d-flex align-items-center bg-white border border-primary rounded p-4 ps-0">
                                 <div class="service-icon p-4">
@@ -653,7 +661,7 @@
                             <div
                                 class="service-content-inner d-flex align-items-center bg-white border border-primary rounded p-4 ps-0">
                                 <div class="service-icon p-4">
-                                   <i class="fa fa-handshake fa-4x"></i>
+                                    <i class="fa fa-handshake fa-4x"></i>
                                 </div>
                                 <div class="service-content">
                                     <h5 class="mb-4">Community Focused​</h5>
@@ -664,11 +672,11 @@
                         </div>
 
 
-                         <div class="col-12">
+                        <div class="col-12">
                             <div
                                 class="service-content-inner d-flex align-items-center bg-white border border-primary rounded p-4 ps-0">
                                 <div class="service-icon p-4">
-                                   <i class="fa fa-recycle fa-4x"></i>
+                                    <i class="fa fa-recycle fa-4x"></i>
                                 </div>
                                 <div class="service-content">
                                     <h5 class="mb-4">Eco-Friendly​</h5>

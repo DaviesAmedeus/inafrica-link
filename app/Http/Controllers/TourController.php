@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Tour;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Http\Request;
 
 class TourController extends Controller
 {
+
     public function categoryTours(Request $request, $slug = null)
     {
         // Find Category by slug
@@ -18,26 +21,29 @@ class TourController extends Controller
             ->where('visibility', 1)
             ->latest()->paginate(8);
 
-        $title = 'Posts in Category' . $category->name;
-        $description = 'Browse the latest posts in the ' . $category->name . ' category. Stay updated!';
+        $title = $category->name;
+        $description = 'Browse the tours in ' . $category->name . ' category. Stay updated!';
+
 
         /**Set SEO Meta Tags */
-        // SEOTools::setTitle($title, false);
-        // SEOTools::setDescription($description);
-        // SEOTools::opengraph()->setUrl(url()->current());
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOTools::opengraph()->setUrl(url()->current());
 
 
         return view('front.pages.category_tours', compact('category', 'tours'));
     }
 
-     public function readTour(Request $request, $slug = null)
+
+
+    public function readTour(Request $request, $slug = null)
     {
         // fetch single post by slug
         $tour = Tour::where('slug', $slug)->firstOrFail();
 
 
         // Get related tourss
-        $relatedTourss = Tour::where('category', $tour->category)
+        $relatedTours = Tour::where('category', $tour->category)
             ->where('id', "!=", $tour->id)
             ->where('visibility', 1)
             ->get();
@@ -56,26 +62,30 @@ class TourController extends Controller
 
 
 
-        // Set SEO Meta Tags
         $title = $tour->title;
-        // $description = ($tours->meta_description != '') ? $tours->meta_description : words($tours->content, 35);
+        $description = ($tour->meta_description != '') ? $tour->meta_description : words($tour->content, 35);
+        $keywords = isset(settings()->$tour->meta_keywords) ? settings()->$tour->meta_keywords : '';
 
-        // SEOTools::setTitle($title, false);
-        // SEOTools::setDescription($description);
-        // SEOTools::opengraph()->setUrl(route('read_tours', ['slug' => $tours->slug]));
-        // SEOTools::opengraph()->addProperty('type', 'article');
-        // SEOTools::opengraph()->addImage(asset('images/tourss' . $tours->featured_image));
-        // SEOTools::twitter()->setImage(asset('images/tourss' . $tours->featured_image));
+        // Set SEO Meta Tags
+        SEOTools::setTitle($title, false);
+        SEOTools::setDescription($description);
+        SEOMeta::setKeywords($keywords);
+
+         // Set Open graph
+        SEOTools::opengraph()->setUrl(route('read_tour', ['slug' => $tour->slug]));
+        SEOTools::opengraph()->addProperty('type', 'article');
+        SEOTools::opengraph()->addImage(asset('storage/images/tours/' . $tour->breadcrumb_img_tour));
+        
+        //twitter SEO
+        SEOTools::twitter()->setImage(asset('storage/images/tours/' . $tour->breadcrumb_img_tour));
 
         $data = [
-            'pageTitle' => $title,
-            'tour'=>$tour,
-            'relatedTourss' => $relatedTourss,
-            'nextTours'=>$nextTour,
-            'prevTours'=>$prevTour
+            'tour' => $tour,
+            'relatedTours' => $relatedTours,
+            'nextTours' => $nextTour,
+            'prevTours' => $prevTour
         ];
 
         return view('front.pages.single_tour', $data);
     }
-
 }

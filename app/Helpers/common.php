@@ -3,6 +3,7 @@
 use App\Models\Category;
 use App\Models\GeneralSetting;
 use App\Models\ParentCategory;
+use Illuminate\Support\Str;
 
 
 /*** Site Information */
@@ -13,6 +14,14 @@ if (!function_exists('settings')) {
         if (!is_null($settings)) {
             return $settings;
         }
+    }
+}
+
+
+/** STRIP WORD */
+if(!function_exists('words')){
+    function words($value, $words = 15, $end= "..."){
+        return Str::words(strip_tags($value), $words, $end);
     }
 }
 
