@@ -32,11 +32,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::controller(AuthController::class)->group(function () {
             Route::get('/login', 'loginForm')->name('login'); // This route displays the login form
             Route::post('/login', 'loginHandler')->name('login_handler'); // This route handles the login
-            /*These Routes Handles if the user has forgot the password */
-            // Route::get('/forgot-password', 'forgotForm')->name('forgot');
-            // Route::post('/send-password-reset-link', 'sendPasswordResetLink')->name('send_password_reset_link');
-            // Route::get('/password/reset/{token}', 'resetForm')->name('reset_password_form');
-            // Route::post('/reset-password-handler', 'resetPasswordHandler')->name('reset_password_handler');
+
+            /* ---These Routes Handles if the user has forgot the password --- */
+            Route::get('/forgot-password', 'forgotForm')->name('forgot');
+            Route::post('/send-password-reset-link', 'sendPasswordResetLink')->name('send_password_reset_link');
+            Route::get('/password/reset/{token}', 'resetForm')->name('reset_password_form');
+            Route::post('/reset-password-handler', 'resetPasswordHandler')->name('reset_password_handler');
         });
     });
 
