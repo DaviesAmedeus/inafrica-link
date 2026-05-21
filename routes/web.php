@@ -8,11 +8,11 @@ use App\Http\Controllers\TourPostController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/link-storage', function () {
-    Artisan::call('storage:link');
-    return 'Storage link created successfully.';
+Route::get('/link', function () {
+   $target = '/home/inafchlf/public_html/storage';
+   $shortcut = '/home/inafchlf/inafrica-link/storage';
+   symlink($target, $shortcut);
 });
-
 
 /* --- STATIC ROUTES --- */
 Route::controller(HomeController::class)->group(function(){
