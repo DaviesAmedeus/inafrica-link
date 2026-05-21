@@ -68,6 +68,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/tour/create', 'createTour')->name('create_tour');
         Route::get('/tours', 'allTours')->name('tours');
         Route::get('/tour/{id}/edit', 'editTour')->name('edit_tour');
-        Route::post('/tour/update', 'updateTour')->name('update_tour');
+        Route::post('/tour/{tour_id}/update', 'updateTour')->name('update_tour');
     });
 });

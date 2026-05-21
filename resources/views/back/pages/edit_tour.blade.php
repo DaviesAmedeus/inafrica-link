@@ -407,8 +407,8 @@
                     $(form).find('span.error-text').text('');
                 },
                 success: function(data) {
+
                     if (data.status == 1) {
-                        $(form)[0].reset();
 
                         $().notifa({
                             vers: 2,
@@ -416,7 +416,13 @@
                             html: data.message,
                             delay: 2500
                         });
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 500);
+
                     } else {
+
                         $().notifa({
                             vers: 2,
                             cssClass: 'error',

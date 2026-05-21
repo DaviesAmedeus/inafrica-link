@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Admin;
 
+use App\Helpers\CMail;
 use App\Models\User;
 use App\Models\UserSocialLink;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class Profile extends Component

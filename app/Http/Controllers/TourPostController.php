@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Admin\Tour\CreateTourAction;
+use App\Actions\Admin\Tour\UpdateTourAction;
+use App\Http\Requests\Admin\Tour\CreateTourRequest;
+use App\Http\Requests\Admin\Tour\UpdateTourRequest;
 use App\Models\Category;
 use App\Models\ParentCategory;
 use App\Models\Tour;
 use App\Models\TourPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 
 class TourPostController extends Controller
@@ -43,101 +49,11 @@ class TourPostController extends Controller
         return view('back.pages.add_tour', $data);
     }
 
-    public function createTour(Request $request)
+    public function createTour(CreateTourRequest $request, CreateTourAction $createTourAction)
     {
-        $request->validate([
-            'title' => 'required|unique:tours,title',
-            'description' => 'required',
-            'overview' => 'required',
-            'category' => 'required|exists:categories,id',
-            'featured_image' => 'required|mimes:png,jpg,jpeg|max:2050',
-            'itinerary' => 'required|array',
-            'itinerary.*.title' => 'required|string|max:255',
-            'itinerary.*.content' => 'required|string',
-        ]);
-
-        if ($request->hasFile('featured_image')) {
-
-            $path = "images/tours/";
-            $resized_path = $path . "resized/";
-            $file = $request->file('featured_image');
-            $filename = "tour_img_" . time() . '.' . $file->getClientOriginalExtension();
-
-            // store original
-            $upload = $file->storeAs($path, $filename, 'public');
-
-            if (!$upload) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Upload failed'
-                ]);
-            }
-
-            // FULL PATHS (correct)
-            $fullPath = storage_path('app/public/' . $path . $filename);
-            $fullResizedPath = storage_path('app/public/' . $resized_path);
-
-            // DEBUG (optional - remove after test)
-            if (!file_exists($fullPath)) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'File not found at: ' . $fullPath
-                ]);
-            }
-
-            // create resized folder
-            if (!File::isDirectory($fullResizedPath)) {
-                File::makeDirectory($fullResizedPath, 0777, true, true);
-            }
-
-            // THUMBNAIL
-            Image::make($fullPath)
-                ->fit(250, 250)
-                ->save($fullResizedPath . 'thumb_' . $filename);
-
-            // RESIZED IMAGE
-            Image::make($fullPath)
-                ->fit(512, 320)
-                ->save($fullResizedPath . 'resized_' . $filename);
-
-            // SAVE TO DB
-            $tour = new Tour();
-            $tour->author_id = Auth::user()->id;
-            $tour->category = $request->category;
-            $tour->title = $request->title;
-            $tour->description = $request->description;
-            $tour->overview = $request->overview;
-            $tour->itinerary = $request->itinerary;
-            $tour->breadcrumb_img_tour = $filename;
-            $tour->tags = $request->tags;
-            $tour->meta_keywords = $request->meta_keywords;
-            $tour->meta_description = $request->meta_description;
-            $tour->visibility = $request->visibility;
-            $savedTour = $tour->save();
-
-            if ($savedTour) {
-
-                foreach ($request->pricing as $item) {
-
-                    TourPrice::create([
-                        'tour_id' => $tour->id,
-                        'people' => $item['people'],
-                        'price' => $item['price']
-                    ]);
-                }
-
-
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'Tour created successfully'
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Something went wrong!'
-                ]);
-            }
-        }
+        // Validate the form
+        $request->validated();
+        return $createTourAction->execute($request);
     }
 
     public function allTours(Request $request)
@@ -152,9 +68,6 @@ class TourPostController extends Controller
     public function editTour(Request $request, $id = null)
     {
         $tour = Tour::with('tourPrices')->findOrFail($id);
-
-
-        // dd($tour);
 
         $categories_html = '';
         $pcategories = ParentCategory::whereHas('children')->orderBy('name', 'asc')->get();
@@ -187,123 +100,10 @@ class TourPostController extends Controller
         return view('back.pages.edit_tour', $data);
     }
 
-    public function updateTour(Request $request)
+    public function updateTour(UpdateTourRequest $request, UpdateTourAction $updateTourAction, $id)
     {
-
-        $tour = Tour::findOrFail($request->tour_id);
-        $featured_image_name = $tour->breadcrumb_img_tour;
-
         // Validate form
-        $request->validate([
-            'title' => 'required|unique:tours,title,' . $tour->id,
-            'description' => 'required',
-            'overview' => 'required',
-            'category' => 'required|exists:categories,id',
-            'featured_image' => 'nullable|mimes:jpeg,jpg,png|max:2050',
-            'itinerary' => 'array',
-            'itinerary.*.title' => 'required|string|max:255',
-            'itinerary.*.content' => 'required|string',
-        ]);
-
-
-
-        if ($request->hasFile('featured_image')) {
-            $old_featured_image = $tour->breadcrumb_img_tour;
-            $path = 'images/tours/';
-            $resized_path = $path . "resized/";
-            $file = $request->file('featured_image');
-            $filename = "tour_img_" . time() . '.' . $file->getClientOriginalExtension();
-
-            // upload a new featured image
-            $upload = $file->storeAs($path, $filename, 'public');
-
-            if ($upload) {
-                // FULL PATHS (correct)
-                $fullPath = storage_path('app/public/' . $path . $filename);
-                $fullResizedPath = storage_path('app/public/' . $resized_path);
-
-                // THUMBNAIL
-                Image::make($fullPath)
-                    ->fit(250, 250)
-                    ->save($fullResizedPath . 'thumb_' . $filename);
-
-                // RESIZED IMAGE
-                Image::make($fullPath)
-                    ->fit(512, 320)
-                    ->save($fullResizedPath . 'resized_' . $filename);
-
-
-
-                // Deleting old featured image
-                if ($old_featured_image != null && File::exists(storage_path('app/public/' . $path . $old_featured_image))) {
-                    // Deleting
-                    File::delete(storage_path('app/public/' . $path . $old_featured_image));
-
-                    // Delete resized image
-                    if (File::exists(storage_path('app/public/' . $resized_path . 'resized_' . $old_featured_image))) {
-                        File::delete(storage_path('app/public/' . $resized_path . 'resized_' . $old_featured_image));
-                    }
-
-                    // Delete thumbnail image
-                    if (File::exists(storage_path('app/public/' . $resized_path . 'thumb_' . $old_featured_image))) {
-                        File::delete(storage_path('app/public/' . $resized_path . 'thumb_' . $old_featured_image));
-                    }
-                }
-
-                $featured_image_name = $filename;
-            } else {
-                return response()->json(['status' => 0, 'message' => 'Something went wrong while uploading the featured image']);
-            }
-        }
-
-        //UPDATING post data in database
-        $tour->category = $request->category;
-        $tour->title = $request->title;
-        $tour->slug = null;
-        $tour->description = $request->description;
-        $tour->overview = $request->overview;
-        $tour->itinerary = $request->itinerary;
-        $tour->breadcrumb_img_tour = $featured_image_name;
-        $tour->tags = $request->tags;
-        $tour->meta_keywords = $request->meta_keywords;
-        $tour->meta_description = $request->meta_description;
-        $tour->visibility = $request->visibility;
-        $saved = $tour->save();
-
-        if ($saved) {
-
-
-            foreach ($request->pricing as $item) {
-
-                // EXISTING PRICE
-                if (!empty($item['id'])) {
-
-                    $tourPrice = TourPrice::findorFail($item['id']);
-
-                    if ($tourPrice) {
-
-                        $tourPrice->update([
-                            'people' => $item['people'],
-                            'price' => $item['price']
-                        ]);
-                    }
-                } else {
-
-                    // NEW PRICE
-                    TourPrice::create([
-                        'tour_id' => $tour->id,
-                        'people' => $item['people'],
-                        'price' => $item['price']
-                    ]);
-                }
-            }
-
-
-
-
-            return response()->json(['status' => 1, 'message' => 'The tour was updated successfully!']);
-        } else {
-            return response()->json(['status' => 0, 'message' => 'Something went wrong while updating the blog post']);
-        }
+        $request->validated();
+        return $updateTourAction->execute($request, $id);
     }
 }

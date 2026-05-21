@@ -308,9 +308,9 @@
                         </a>
                         <ul class="submenu">
                             <li><a href="{{ route('admin.add_tour') }}"
-                                    class="{{ Route::is('admin.add_tour') ? 'active' : '' }}">Book Tour+</a></li>
+                                    class="{{ Route::is('admin.add_tour') ? 'active' : '' }}">Create Tour+</a></li>
                             <li><a href="{{ route('admin.tours') }}"
-                                    class="{{ Route::is('admin.tours') ? 'active' : '' }}">Booking List</a></li>
+                                    class="{{ Route::is('admin.tours') ? 'active' : '' }}">Tour Lists</a></li>
 
                         </ul>
                     </li>
@@ -321,8 +321,8 @@
                             <span class="micon fa fa-money"></span><span class="mtext">Bookings</span>
                         </a>
                         <ul class="submenu">
-                            <li><a href="">Add Price</a></li>
-                            <li><a href="">Price List</a></li>
+                            <li><a href="">Book Tour+</a></li>
+                            <li><a href="">Booking List</a></li>
 
                         </ul>
                     </li>
