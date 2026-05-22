@@ -214,13 +214,15 @@
                                     <span class="text-danger ml-1">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            @if ($selected_breadcrumb_img)
+                            @if ($isUpdateCategoryMode)
+                             @if ($selected_breadcrumb_img)
                                 <div class="d-block" style="max-width: 200px;">
                                     <img src="{{ asset('storage/' . $selected_breadcrumb_img) }}" alt=""
                                         class="img-thumbnail" style="max-width: 100%;height:auto;">
                                 </div>
                             @endif
+                            @endif
+
 
                             <div class="form-group">
                                 <label for=""><b>Image</b>:</label>

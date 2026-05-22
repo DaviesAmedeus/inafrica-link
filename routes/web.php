@@ -8,12 +8,7 @@ use App\Http\Controllers\TourPostController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/link', function () {
-   $target = '/home/inafchlf/public_html/storage';
-   $shortcut = '/home/inafchlf/inafrica-link/storage';
-   symlink($target, $shortcut);
-});
-
+// ln -s /home/inafchlf/inafrica-link/storage /home/inafchlf/public_html/public/storage
 /* --- STATIC ROUTES --- */
 Route::controller(HomeController::class)->group(function(){
     Route::get('/', 'index')->name('home');
