@@ -266,7 +266,8 @@
                         name="pricing[${pricingIndex}][price]"
                         class="form-control price-input"
                         placeholder="e.g 1200"
-                        min="0">
+                        min="0"
+                        step="0.01">
                 </td>
 
                 <td>
