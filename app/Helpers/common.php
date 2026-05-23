@@ -43,7 +43,7 @@ if (!function_exists('navigations')) {
             foreach ($pcategories as $item) {
                 $navigations_html .= '
                         <div class="nav-item dropdown">
-                            <a href="#!" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">'. $item->name .'</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">'. $item->name .'</a>
 
                             <div class="dropdown-menu m-0">
             ';

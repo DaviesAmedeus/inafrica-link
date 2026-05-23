@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600&family=Roboto&display=swap" rel="stylesheet">
 
-     <!-- Site favicon -->
+    <!-- Site favicon -->
     <link rel="icon" type="image/png" sizes="16x16"
         href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : '' }}" />
 
@@ -73,7 +73,8 @@
                 style="background-color: rgb(255, 255, 255); color: white">
                 <a href="/" class="navbar-brand p-0">
 
-                    <img src="/images/site/{{ isset(settings()->site_light_mode_logo) ? settings()->site_light_mode_logo : '' }}" alt="Logo">
+                    <img src="/images/site/{{ isset(settings()->site_light_mode_logo) ? settings()->site_light_mode_logo : '' }}"
+                        alt="Logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
@@ -84,7 +85,7 @@
                         <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
                         {!! navigations() !!}
 
-
+                        
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">More</a>
 
