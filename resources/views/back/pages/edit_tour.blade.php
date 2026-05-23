@@ -75,11 +75,11 @@
 
                                             <input type="text" name="itinerary[{{ $index }}][title]"
                                                 class="form-control mb-2"
-                                                placeholder="Day {{ $index }} Title (optional)"
+                                                placeholder="Itinerary title (Required)..."
                                                 value="{{ $item['title'] ?? '' }}">
 
                                             <textarea name="itinerary[{{ $index }}][content]" class="form-control mb-2"
-                                                placeholder="Enter itinerary content (required)...">{{ $item['content'] ?? '' }}</textarea>
+                                                placeholder="Itinerary content (Optional)...">{{ $item['content'] ?? '' }}</textarea>
 
                                             <span class="text-danger itinerary_error"></span>
 
@@ -91,6 +91,8 @@
                                     @endforeach
                                 @endif
                             </div>
+                             <!-- Error Message when fields are empty -->
+                            <div id="itinerary-error" class="alert alert-danger d-none"></div>
 
                             <button type="button" id="add_itinerary" class="btn btn-primary mt-2">
                                 + Add Itinerary
@@ -259,47 +261,106 @@
         // Adding Itenerary List
         let itineraryIndex = {{ !empty($tour->itinerary) ? count($tour->itinerary) : 0 }};
 
+           function addItineraryItem() {
+            let itineraryItem = `
+                <div class="card mb-2 p-2 itinerary-item">
+
+                    <input type="text"
+                        name="itinerary[${itineraryIndex}][title]"
+                        class="form-control mb-2"
+                        placeholder="Itinerary title (Required)...">
+
+                    <textarea
+                        name="itinerary[${itineraryIndex}][content]"
+                        class="form-control mb-2"
+                        placeholder="Enter itinerary content (Optional)..."></textarea>
+                        <span class="text-danger itinerary_error"></span>
+
+                    <button type="button" class="btn btn-danger btn-sm remove-itinerary">
+                        Remove
+                    </button>
+
+                </div> `;
+
+            $('#itinerary_container').append(itineraryItem);
+            itineraryIndex++;
+        }
+
+
         $('#add_itinerary').on('click', function() {
 
-            let lastContent = $('.itinerary-item textarea').last().val();
+            let lastItineraryTitle = $('.itinerary-item input').last().val();
 
-            if (lastContent !== undefined && lastContent.trim() === '') {
-                alert('Please fill the current itinerary content first.');
+            if (lastItineraryTitle !== undefined && lastItineraryTitle.trim() === '') {
+                $('#itinerary-error')
+                    .removeClass('d-none')
+                    .text('"Itinerary title" is required but "Itinerary content" is optional!.');
                 return;
             }
+            // Clearing error
+            $('#itinerary-error').addClass('d-none').text('');
 
-            itineraryIndex++;
-
-            $('#itinerary_container').append(`
-        <div class="card mb-2 p-2 itinerary-item">
-
-            <input type="text"
-                   name="itinerary[${itineraryIndex}][title]"
-                   class="form-control mb-2"
-                   placeholder="Day ${itineraryIndex} Title (optional)">
-
-            <textarea
-                name="itinerary[${itineraryIndex}][content]"
-                class="form-control mb-2"
-                placeholder="Enter itinerary content (required)..."></textarea>
-                <span class="text-danger itinerary_error"></span>
-
-            <button type="button" class="btn btn-danger btn-sm remove-itinerary">
-                Remove
-            </button>
-
-        </div>
-    `);
-
+            addItineraryItem();
         });
+
         // Remove itinerary from the list
         $(document).on('click', '.remove-itinerary', function() {
+            if ($('#itinerary_container div').length == 1) {
+                $('#itinerary-error')
+                    .removeClass('d-none')
+                    .text('At least one "Itinerary Item" is required!');
+                return;
+            }
             $(this).closest('.itinerary-item').remove();
         });
 
 
 
-        /* ---UPDATING MECHANISM START --- */
+
+
+        // OLD
+
+    //     $('#add_itinerary').on('click', function() {
+
+    //         let lastContent = $('.itinerary-item textarea').last().val();
+
+    //         if (lastContent !== undefined && lastContent.trim() === '') {
+    //             alert('Please fill the current itinerary content first.');
+    //             return;
+    //         }
+
+    //         itineraryIndex++;
+
+    //         $('#itinerary_container').append(`
+    //     <div class="card mb-2 p-2 itinerary-item">
+
+    //         <input type="text"
+    //                name="itinerary[${itineraryIndex}][title]"
+    //                class="form-control mb-2"
+    //                placeholder="Day ${itineraryIndex} Title (optional)">
+
+    //         <textarea
+    //             name="itinerary[${itineraryIndex}][content]"
+    //             class="form-control mb-2"
+    //             placeholder="Enter itinerary content (required)..."></textarea>
+    //             <span class="text-danger itinerary_error"></span>
+
+    //         <button type="button" class="btn btn-danger btn-sm remove-itinerary">
+    //             Remove
+    //         </button>
+
+    //     </div>
+    // `);
+
+    //     });
+    //     // Remove itinerary from the list
+    //     $(document).on('click', '.remove-itinerary', function() {
+    //         $(this).closest('.itinerary-item').remove();
+    //     });
+
+
+
+        /* ---UPDATING TOUR PRICING MECHANISM START --- */
         let pricingIndex = {{ count($tour->tourPrices) }};
 
         function addPricingRow() {

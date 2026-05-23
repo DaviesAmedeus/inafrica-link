@@ -61,6 +61,8 @@
                             <label><b>Itinerary</b>:</label>
 
                             <div id="itinerary_container"></div>
+                            <!-- Error Message when fields are empty -->
+                            <div id="itinerary-error" class="alert alert-danger d-none"></div>
 
                             <button type="button" id="add_itinerary" class="btn btn-primary mt-2">
                                 + Add Itinerary
@@ -197,60 +199,77 @@
             onSuccess: function(message, element) {}
         });
 
-        // ADDING ITINERARY MECHANISM
+
+
+
+        /* --- ADDING ITINERARY MECHANISM -START --- */
         let itineraryIndex = 0;
+
+        function addItineraryItem() {
+            let itineraryItem = `
+                <div class="card mb-2 p-2 itinerary-item">
+
+                    <input type="text"
+                        name="itinerary[${itineraryIndex}][title]"
+                        class="form-control mb-2"
+                        placeholder="Itinerary title (Required)...">
+
+                    <textarea
+                        name="itinerary[${itineraryIndex}][content]"
+                        class="form-control mb-2"
+                        placeholder="Itinerary content (Optional)..."></textarea>
+                        <span class="text-danger itinerary_error"></span>
+
+                    <button type="button" class="btn btn-danger btn-sm remove-itinerary">
+                        Remove
+                    </button>
+
+                </div> `;
+
+            $('#itinerary_container').append(itineraryItem);
+            itineraryIndex++;
+        }
+
+        addItineraryItem();
 
         $('#add_itinerary').on('click', function() {
 
-            let lastContent = $('.itinerary-item textarea').last().val();
+            let lastItineraryTitle = $('.itinerary-item input').last().val();
 
-            if (lastContent !== undefined && lastContent.trim() === '') {
-                alert('Please fill the current itinerary content first.');
+            if (lastItineraryTitle !== undefined && lastItineraryTitle.trim() === '') {
+                $('#itinerary-error')
+                    .removeClass('d-none')
+                    .text('"Itinerary title" is required but "Itinerary content" is optional!.');
                 return;
             }
+            // Clearing error
+            $('#itinerary-error').addClass('d-none').text('');
 
-            itineraryIndex++;
-
-            $('#itinerary_container').append(`
-        <div class="card mb-2 p-2 itinerary-item">
-
-            <input type="text"
-                   name="itinerary[${itineraryIndex}][title]"
-                   class="form-control mb-2"
-                   placeholder="Day ${itineraryIndex} Title (optional)">
-
-            <textarea
-                name="itinerary[${itineraryIndex}][content]"
-                class="form-control mb-2"
-                placeholder="Enter itinerary content (required)..."></textarea>
-                <span class="text-danger itinerary_error"></span>
-
-            <button type="button" class="btn btn-danger btn-sm remove-itinerary">
-                Remove
-            </button>
-
-        </div>
-    `);
+            addItineraryItem();
         });
 
         // Remove itinerary from the list
         $(document).on('click', '.remove-itinerary', function() {
+            if ($('#itinerary_container div').length == 1) {
+                $('#itinerary-error')
+                    .removeClass('d-none')
+                    .text('At least one "Itinerary Item" is required!');
+                return;
+            }
             $(this).closest('.itinerary-item').remove();
         });
 
+        /* --- ADDING ITINERARY MECHANISM -END  --- */
 
 
-        /* ---PRICING MECHANISM START --- */
 
 
-
-        // function
+        /* ---TOUR PRICING MECHANISM START --- */
         let pricingIndex = 0;
 
         function addPricingRow() {
             let row = `
             <tr>
-
                 <td>
                     <input type="number"
                         name="pricing[${pricingIndex}][people]"
@@ -258,7 +277,6 @@
                         placeholder="e.g 5"
                         min="1"
                         max="10">
-
                 </td>
 
                 <td>
@@ -279,17 +297,18 @@
 
             </tr>
         `;
+
             $('#pricing-body').append(row);
+
             pricingIndex++;
         };
 
         addPricingRow();
+
         $('#add-price-group').click(function() {
 
             let lastRow = $('#pricing-body tr:last');
-
             let people = lastRow.find('.people-input').val();
-
             let price = lastRow.find('.people-price').val();
 
             // VALIDATION (checking if either of the fields are empty)
@@ -301,9 +320,7 @@
             }
 
             // CLEAR ERROR
-            $('#pricing-error')
-                .addClass('d-none')
-                .text('');
+            $('#pricing-error').addClass('d-none').text('');
 
             addPricingRow();
         });
@@ -320,7 +337,6 @@
             }
             $(this).closest('tr').remove();
         });
-
         /* ---PRICING MECHANISM END --- */
 
 

@@ -23,7 +23,7 @@ class UpdateTourRequest extends FormRequest
     public function rules(): array
     {
         $tourId = $this->route('tour_id');
-        
+
         return [
             'title' => 'required|unique:tours,title,' . $tourId,
             'description' => 'required',
@@ -32,7 +32,7 @@ class UpdateTourRequest extends FormRequest
             'featured_image' => 'nullable|mimes:jpeg,jpg,png|max:2050',
             'itinerary' => 'array',
             'itinerary.*.title' => 'required|string|max:255',
-            'itinerary.*.content' => 'required|string',
+            // 'itinerary.*.content' => 'required|string',
         ];
     }
 }
