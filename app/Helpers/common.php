@@ -39,36 +39,57 @@ if (!function_exists('navigations')) {
 
 
 
-        if (count($pcategories) > 0) {
-            foreach ($pcategories as $item) {
-                $navigations_html .= '
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">'. $item->name .'</a>
+      foreach ($pcategories as $item) {
 
-                            <div class="dropdown-menu m-0">
-            ';
+    // Get current slug from URL
+    $currentSlug = request()->route('slug');
 
-                foreach ($item->children as $category) {
+    // Check if current slug exists in children
+    $isActive = $item->children->contains('slug', $currentSlug);
 
-                        $navigations_html .=   '<a href="'.route('category_tours', $category->slug).'" class="dropdown-item">'.$category->name.'</a> ';
+    $activeClass = $isActive ? 'active' : '';
 
-                }
+    $navigations_html .= '
+        <div class="nav-item dropdown">
+            <a href="#"
+               class="nav-link dropdown-toggle '.$activeClass.'"
+               data-bs-toggle="dropdown">
+               '.$item->name.'
+            </a>
 
-                $navigations_html .= '
-                            </div>
-                        </div>
-            ';
-            }
-        }
+            <div class="dropdown-menu m-0">
+    ';
+
+    foreach ($item->children as $category) {
+
+        $childActive = $currentSlug == $category->slug ? 'active' : '';
+
+        $navigations_html .= '
+            <a href="'.route('category_tours', $category->slug).'"
+               class="dropdown-item '.$childActive.'">
+               '.$category->name.'
+            </a>
+        ';
+    }
+
+    $navigations_html .= '
+            </div>
+        </div>
+    ';
+}
         if (count($categories) > 0) {
             foreach ($categories as $item) {
+                                     $activeClass = request()->route('slug') == $item->slug ? 'active' : '';
+
+
                 $navigations_html .= '
-                         <a href="'.route('category_tours', $item->slug).'" class="nav-item nav-link ">'.$item->name.'</a>
+                         <a href="'.route('category_tours', $item->slug).'" class="nav-item nav-link '.$activeClass.'  ">'.$item->name.'</a>
                 ';
 
 
             }
         }
+
 
         return $navigations_html;
     }
