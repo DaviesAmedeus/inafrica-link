@@ -171,7 +171,7 @@
                 aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <form class="modal-content"
-                        wire:submit="{{ $isUpdateCategoryMode ? 'updateCategory()' : 'createCategory()' }}">
+                        wire:submit.prevent="{{ $isUpdateCategoryMode ? 'updateCategory()' : 'createCategory()' }}">
                         <div class="modal-header">
                             <h4 class="modal-title" id="myLargeModalLabel">
                                 {{ $isUpdateCategoryMode ? 'Update Category' : 'Add Category' }}
@@ -215,12 +215,12 @@
                                 @enderror
                             </div>
                             @if ($isUpdateCategoryMode)
-                             @if ($selected_breadcrumb_img)
-                                <div class="d-block" style="max-width: 200px;">
-                                    <img src="{{ asset('storage/' . $selected_breadcrumb_img) }}" alt=""
-                                        class="img-thumbnail" style="max-width: 100%;height:auto;">
-                                </div>
-                            @endif
+                                @if ($selected_breadcrumb_img)
+                                    <div class="d-block" style="max-width: 200px;">
+                                        <img src="{{ asset('storage/' . $selected_breadcrumb_img) }}" alt=""
+                                            class="img-thumbnail" style="max-width: 100%;height:auto;">
+                                    </div>
+                                @endif
                             @endif
 
 
@@ -233,13 +233,25 @@
                                 @enderror
                             </div>
 
+                            <div wire:loading wire:target="breadcrumb_img" class="text-primary">
+                                Uploading image...
+                            </div>
+
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                wire:loading.attr="disabled" wire:target="breadcrumb_img">
                                 Close
                             </button>
-                            <button type="submit" class="btn btn-primary">
-                                {{ $isUpdateCategoryMode ? 'Save changes' : 'Create' }}
+                            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"
+                                wire:target="breadcrumb_img">
+                                <span wire:loading.remove wire:target="breadcrumb_img">
+                                    {{ $isUpdateCategoryMode ? 'Save changes' : 'Create' }}
+                                </span>
+
+                                <span wire:loading wire:target="breadcrumb_img">
+                                    Uploading...
+                                </span>
                             </button>
                         </div>
                     </form>
