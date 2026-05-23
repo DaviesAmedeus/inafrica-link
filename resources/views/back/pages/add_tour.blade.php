@@ -347,16 +347,17 @@
                 },
                 success: function(data) {
                     if (data.status == 1) {
-                        $(form)[0].reset();
-                        CKEDITOR.instances.overview.setData('')
-                        $('img#featured_image_preview').attr('src', '');
-                        $('input[name="tags"]').tagsinput('removeAll');
+
                         $().notifa({
                             vers: 2,
                             cssClass: 'success',
                             html: data.message,
-                            delay: 2500
+                            delay: 1500
                         });
+
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1500);
                     } else {
                         $().notifa({
                             vers: 2,
