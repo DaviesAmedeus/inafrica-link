@@ -113,20 +113,21 @@
     <div class="container-fluid packages py-5" id="packages">
         <div class="container py-5">
             <div class="mx-auto text-center mb-5" style="max-width: 900px;">
-                <h5 class="section-title px-3">TOUR Categories</h5>
-                <h1 class="mb-0">Choose From Our Ctegories</h1>
+                <h5 class="section-title px-3">TOUR CATEGORIES</h5>
+                <h1 class="mb-0">Choose From Our Categories</h1>
             </div>
             <div class="packages-carousel owl-carousel">
-                <!-- Package 1 Start -->
-                <div class="packages-item">
+                @forelse ( tourCategories() as $category)
+
+                  <div class="packages-item">
                     <div class="packages-img">
-                        <img src="{{ asset('front/assets/img/trekking.webp') }}" class="img-fluid w-100 rounded-top"
+                        <img src="{{ asset('storage/images/breadcrumb/'.$category->breadcrumb_img) }}" class="img-fluid w-100 rounded-top"
                             alt="Image">
                     </div>
                     <div class="packages-content bg-light">
                         <div class="p-4 pb-0">
-                            <h5 class="mb-0">Trekking</h5>
-                            <small class="">Explore nature eye to eye- adventure begin on the trail</small>
+                            <h5 class="mb-0">{{ $category->name }}</h5>
+                            <small class="">{{ words($category->category_desc, 10) }}</small>
                             <div class="mb-3">
                                 <small class="fa fa-star text-primary"></small>
                                 <small class="fa fa-star text-primary"></small>
@@ -134,80 +135,19 @@
                                 <small class="fa fa-star text-primary"></small>
                                 <small class="fa fa-star text-primary"></small>
                             </div>
-                            <a href="" class="btn btn-primary mb-3">View All Treks</a>
+                            <a href="{{ route('category_tours', ['slug'=> $category->slug]) }}" class="btn btn-primary mb-3">View {{ $category->name }}</a>
                         </div>
                     </div>
                 </div>
+
+                @empty
+                    <div>
+                        No Categories yet
+                    </div>
+                @endforelse
+
                 <!-- Package 1 end -->
 
-                <!-- Package 2 Start -->
-                <div class="packages-item">
-                    <div class="packages-img">
-                        <img src="{{ asset('front/assets/img/local-tours.webp') }}" class="img-fluid w-100 rounded-top"
-                            alt="Image">
-                    </div>
-                    <div class="packages-content bg-light">
-                        <div class="p-4 pb-0">
-                            <h5 class="mb-0">Local Tours</h5>
-                            <small class="">Discover culture, history and hidden gems close to home</small>
-                            <div class="mb-3">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                            </div>
-                            <a href="" class="btn btn-primary mb-3">View All Tours</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Package 2 end -->
-
-                <!-- Package 3 Start -->
-                <div class="packages-item">
-                    <div class="packages-img">
-                        <img src="{{ asset('front/assets/img/wild-safaris.webp') }}" class="img-fluid w-100 rounded-top"
-                            alt="Image">
-                    </div>
-                    <div class="packages-content bg-light">
-                        <div class="p-4 pb-0">
-                            <h5 class="mb-0">Wild Safaris</h5>
-                            <small class="">Get close to the wild and witness nature in its raw beauty.</small>
-                            <div class="mb-3">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                            </div>
-                            <a href="" class="btn btn-primary mb-3">View All Safaris</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Package 3 end -->
-
-                <!-- Package 4 Start -->
-                <div class="packages-item">
-                    <div class="packages-img">
-                        <img src="{{ asset('front/assets/img/beach-holiday.webp') }}" class="img-fluid w-100 rounded-top"
-                            alt="Image">
-                    </div>
-                    <div class="packages-content bg-light">
-                        <div class="p-4 pb-0">
-                            <h5 class="mb-0">Beach Holidays</h5>
-                            <small class="">Relax, unwind and soak in the sun by the ocean</small>
-                            <div class="mb-3">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                            </div>
-                            <a href="" class="btn btn-primary mb-3">See All Vacations</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Package 4 end -->
             </div>
         </div>
     </div>

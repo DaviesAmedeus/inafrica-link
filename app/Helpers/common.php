@@ -3,6 +3,7 @@
 use App\Models\Category;
 use App\Models\GeneralSetting;
 use App\Models\ParentCategory;
+use App\Models\SiteSocialLink;
 use Illuminate\Support\Str;
 
 
@@ -17,10 +18,21 @@ if (!function_exists('settings')) {
     }
 }
 
+/** Site social links */
+if(!function_exists('site_social_links')){
+    function site_social_links(){
+        $links = SiteSocialLink::take(1)->first();
+        if(!is_null($links)){
+            return $links;
+        }
+    }
+}
+
 
 /** STRIP WORD */
-if(!function_exists('words')){
-    function words($value, $words = 15, $end= "..."){
+if (!function_exists('words')) {
+    function words($value, $words = 15, $end = "...")
+    {
         return Str::words(strip_tags($value), $words, $end);
     }
 }
@@ -39,54 +51,52 @@ if (!function_exists('navigations')) {
 
 
 
-      foreach ($pcategories as $item) {
+        foreach ($pcategories as $item) {
 
-    // Get current slug from URL
-    $currentSlug = request()->route('slug');
+            // Get current slug from URL
+            $currentSlug = request()->route('slug');
 
-    // Check if current slug exists in children
-    $isActive = $item->children->contains('slug', $currentSlug);
+            // Check if current slug exists in children
+            $isActive = $item->children->contains('slug', $currentSlug);
 
-    $activeClass = $isActive ? 'active' : '';
+            $activeClass = $isActive ? 'active' : '';
 
-    $navigations_html .= '
+            $navigations_html .= '
         <div class="nav-item dropdown">
             <a href="#"
-               class="nav-link dropdown-toggle '.$activeClass.'"
+               class="nav-link dropdown-toggle ' . $activeClass . '"
                data-bs-toggle="dropdown">
-               '.$item->name.'
+               ' . $item->name . '
             </a>
 
             <div class="dropdown-menu m-0">
     ';
 
-    foreach ($item->children as $category) {
+            foreach ($item->children as $category) {
 
-        $childActive = $currentSlug == $category->slug ? 'active' : '';
+                $childActive = $currentSlug == $category->slug ? 'active' : '';
 
-        $navigations_html .= '
-            <a href="'.route('category_tours', $category->slug).'"
-               class="dropdown-item '.$childActive.'">
-               '.$category->name.'
+                $navigations_html .= '
+            <a href="' . route('category_tours', $category->slug) . '"
+               class="dropdown-item ' . $childActive . '">
+               ' . $category->name . '
             </a>
         ';
-    }
+            }
 
-    $navigations_html .= '
+            $navigations_html .= '
             </div>
         </div>
     ';
-}
+        }
         if (count($categories) > 0) {
             foreach ($categories as $item) {
-                                     $activeClass = request()->route('slug') == $item->slug ? 'active' : '';
+                $activeClass = request()->route('slug') == $item->slug ? 'active' : '';
 
 
                 $navigations_html .= '
-                         <a href="'.route('category_tours', $item->slug).'" class="nav-item nav-link '.$activeClass.'  ">'.$item->name.'</a>
+                         <a href="' . route('category_tours', $item->slug) . '" class="nav-item nav-link ' . $activeClass . '  ">' . $item->name . '</a>
                 ';
-
-
             }
         }
 
@@ -95,3 +105,14 @@ if (!function_exists('navigations')) {
     }
 }
 
+
+/*** Site Information */
+if (!function_exists('tourCategories')) {
+    function tourCategories()
+    {
+        $categories = Category::orderBy('name', 'asc')->get();
+         if (!is_null($categories)) {
+            return $categories;
+        }
+    }
+}
