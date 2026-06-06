@@ -110,7 +110,7 @@ if (!function_exists('navigations')) {
 if (!function_exists('tourCategories')) {
     function tourCategories()
     {
-        $categories = Category::orderBy('name', 'asc')->limit(1)->get();
+        $categories = Category::orderBy('name', 'asc')->get();
          if (!is_null($categories)) {
             return $categories;
         }

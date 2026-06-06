@@ -23,6 +23,8 @@
     <link href="{{ asset('front/assets/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ asset('front/assets/lib/lightbox/css/lightbox.min.css') }}" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('front/assets/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -211,7 +213,7 @@
                         <div class="footer-item">
                             <div class="row gy-3 gx-2 mb-4">
                                 {{-- From Trip Advisor --}}
-                                <div id="TA_excellent805" class="TA_excellent">
+                                {{-- <div id="TA_excellent805" class="TA_excellent">
                                     <ul id="qLAwcyi" class="TA_links iIsBzzY">
                                         <li id="qVfnXXUYZsI" class="3bXaFKkB"><a target="_blank"
                                                 href="https://www.tripadvisor.com/Attraction_Review-g297913-d23589158-Reviews-In_Africa_Link-Arusha_Arusha_Region.html"><img
@@ -219,7 +221,7 @@
                                                     alt="TripAdvisor" class="widEXCIMG" id="CDSWIDEXCLOGO" /></a>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> --}}
                                 <script async
                                     src="https://www.jscache.com/wejs?wtype=excellent&amp;uniq=805&amp;locationId=23589158&amp;lang=en_US&amp;display_version=2"
                                     data-loadtrk onload="this.loadtrk=true"></script>
@@ -270,6 +272,8 @@
 
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('front/assets/lib/easing/easing.min.js') }}"></script>
     <script src="{{ asset('front/assets/lib/waypoints/waypoints.min.js') }}"></script>
@@ -279,6 +283,7 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('front/assets/js/main.js') }}"></script>
+     @stack('scripts')
 </body>
 
 </html>
