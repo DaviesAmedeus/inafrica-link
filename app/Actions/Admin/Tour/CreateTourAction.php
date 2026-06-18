@@ -88,6 +88,21 @@ class CreateTourAction
                     ]);
                 }
 
+                // Saving the tour cost items to the database
+                foreach ($request->costInclude as $item) {
+                    $tour->costItems()->create([
+                        'type' => 'include',
+                        'item' => $item
+                    ]);
+                }
+
+                foreach ($request->costExclude as $item) {
+                    $tour->costItems()->create([
+                        'type' => 'exclude',
+                        'item' => $item
+                    ]);
+                }
+
                 DB::commit();
                 return response()->json([
                     'status' => 1,

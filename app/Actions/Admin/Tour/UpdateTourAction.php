@@ -4,6 +4,7 @@
 namespace App\Actions\Admin\Tour;
 
 use App\Models\Tour;
+use App\Models\TourCostItem;
 use App\Models\TourPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -91,39 +92,130 @@ class UpdateTourAction
 
 
 
-             // Saving / Updating the tour prices to the database
-            foreach ($request->pricing as $item) {
+            // Saving / Updating the tour prices to the database
 
-                // EXISTING PRICE
-                if (!empty($item['id'])) {
+            // foreach ($request->pricing as $item) {
 
-                    $tourPrice = TourPrice::findorFail($item['id']);
+            //     // EXISTING PRICE
+            //     if (!empty($item['id'])) {
 
-                    if ($tourPrice) {
+            //         $tourPrice = TourPrice::findorFail($item['id']);
 
-                        $tourPrice->update([
-                            'people' => $item['people'],
-                            'price' => $item['price']
-                        ]);
-                    }
-                } else {
+            //         if ($tourPrice) {
 
-                    // NEW PRICE
-                    TourPrice::create([
+            //             $tourPrice->update([
+            //                 'people' => $item['people'],
+            //                 'price' => $item['price']
+            //             ]);
+            //         }
+            //     } else {
+
+            //         // NEW PRICE
+            //         TourPrice::create([
+            //             'tour_id' => $tour->id,
+            //             'people' => $item['people'],
+            //             'price' => $item['price']
+            //         ]);
+            //     }
+            // }
+
+
+             $pricingIds = [];
+              foreach ($request->pricing ?? [] as $item){
+
+              if (empty(trim($item['people'])) && empty(trim($item['price']))) {
+                    continue;
+                }
+
+                $tourPrice = TourPrice::updateOrCreate(
+                    ['id'=>$item['id'] ?? null],
+                    [
                         'tour_id' => $tour->id,
                         'people' => $item['people'],
                         'price' => $item['price']
-                    ]);
+                    ]
+                );
+
+                 $pricingIds[]=$tourPrice->id;
+
+              }
+
+               TourPrice::where('tour_id', $tour->id)
+                ->whereNotIn('id', $pricingIds)
+                ->delete();
+
+
+
+
+
+            $includeIds = [];
+
+            foreach ($request->costInclude ?? [] as $item) {
+
+                if (empty(trim($item['item']))) {
+                    continue;
                 }
+
+                $costItem = TourCostItem::updateOrCreate(
+                    [
+                        'id' => $item['id'] ?? null
+                    ],
+                    [
+                        'tour_id' => $tour->id,
+                        'type' => 'include',
+                        'item' => $item['item']
+                    ]
+                );
+
+                $includeIds[] = $costItem->id;
             }
 
-            DB::commit();
-              return response()->json(['status' => 1, 'message' => 'The tour was updated successfully!']);
+            TourCostItem::where('tour_id','=', $tour->id)
+                ->where('type', 'include')
+                ->whereNotIn('id', $includeIds)
+                ->delete();
 
+
+            $excludeIds = [];
+
+            foreach ($request->costExclude ?? [] as $item) {
+
+                if (empty(trim($item['item']))) {
+                    continue;
+                }
+
+                $costItem = TourCostItem::updateOrCreate(
+                    [
+                        'id' => $item['id'] ?? null
+                    ],
+                    [
+                        'tour_id' => $tour->id,
+                        'type' => 'exclude',
+                        'item' => $item['item']
+                    ]
+                );
+
+                $excludeIds[] = $costItem->id;
+            }
+
+
+            TourCostItem::where('tour_id', $tour->id)
+                ->where('type', 'exclude')
+                ->whereNotIn('id', $excludeIds)
+                ->delete();
+
+
+
+
+
+
+
+            DB::commit();
+            return response()->json(['status' => 1, 'message' => 'The tour was updated successfully!']);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Project creation error: ' . $th->getMessage() . ' ' . $th->getTraceAsString());
-              return response()->json(['status' => 0, 'message' => 'Something went wrong while updating the blog post']);
+            return response()->json(['status' => 0, 'message' => 'Something went wrong while updating the blog post']);
         }
     }
 }

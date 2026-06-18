@@ -33,6 +33,8 @@ class UpdateTourRequest extends FormRequest
             'itinerary' => 'array',
             'itinerary.*.title' => 'required|string|max:255',
             // 'itinerary.*.content' => 'required|string',
+            'costInclude' => 'required|array|max:255',
+            'costExclude' => 'required|array|max:255',
         ];
     }
 }

@@ -283,7 +283,7 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('front/assets/js/main.js') }}"></script>
-     @stack('scripts')
+    @stack('scripts')
 </body>
 
 </html>

@@ -74,8 +74,7 @@
                                         <div class="card mb-2 p-2 itinerary-item">
 
                                             <input type="text" name="itinerary[{{ $index }}][title]"
-                                                class="form-control mb-2"
-                                                placeholder="Itinerary title (Required)..."
+                                                class="form-control mb-2" placeholder="Itinerary title (Required)..."
                                                 value="{{ $item['title'] ?? '' }}">
 
                                             <textarea name="itinerary[{{ $index }}][content]" class="form-control mb-2"
@@ -91,7 +90,7 @@
                                     @endforeach
                                 @endif
                             </div>
-                             <!-- Error Message when fields are empty -->
+                            <!-- Error Message when fields are empty -->
                             <div id="itinerary-error" class="alert alert-danger d-none"></div>
 
                             <button type="button" id="add_itinerary" class="btn btn-primary mt-2">
@@ -161,6 +160,97 @@
                         <button type="button" id="add-price-group" class="btn btn-primary">
                             + Add Pricing Group
                         </button>
+
+                    </div>
+                </div>
+
+
+                <div class="card card-box mb-2">
+                    <div class="card-header weight-500">COST INCLUDES & EXCLUDES</div>
+                    <div class="card-body">
+
+
+
+                        <div class="row p-4">
+                            <div class="col-6 border py-2">
+                                <p><strong>Cost Includes</strong></p>
+                                <div id="cost-include-container">
+
+                                    @if (!empty($tour->costItems->where('type', 'include')))
+
+                                        @foreach ($tour->costItems->where('type', 'include')->values() as $index => $item)
+                                            <div class="row mb-2 align-items-center cost-include-item">
+
+                                                <input type="hidden" name="costInclude[{{ $index }}][id]"
+                                                    value="{{ $item->id }}">
+
+                                                <div class="col">
+                                                    <input type="text" name="costInclude[{{ $index }}][item]"
+                                                        class="form-control" value="{{ $item->item }}">
+                                                </div>
+
+                                                <div class="col-auto">
+                                                    <button type="button"
+                                                        class="btn btn-danger remove-cost-include-item">
+                                                        <i class="icon-copy dw dw-delete-3"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        @endforeach
+
+                                    @endif
+                                </div>
+
+
+                                <!-- Error Message when fields are empty -->
+                                <div id="cost-include-error" class="alert alert-danger d-none"></div>
+                                <button type="button" id="add_cost_include_item" class="btn btn-primary">
+                                    <i class="icon-copy dw dw-add"></i> Add
+                                </button>
+                            </div>
+
+
+                            <div class="col-6 border py-2">
+                                <p><strong>Cost Excludes</strong></p>
+                                <div id="cost-exclude-container">
+                                    @if (!empty($tour->costItems->where('type', 'exclude')))
+                                        @foreach ($tour->costItems->where('type', 'exclude')->values() as $index => $item)
+                                            <div class="row mb-2 align-items-center cost-exclude-item">
+
+                                                <input type="hidden" name="costExclude[{{ $index }}][id]"
+                                                    value="{{ $item->id }}">
+
+                                                <div class="col">
+                                                    <input type="text" name="costExclude[{{ $index }}][item]"
+                                                        class="form-control" value="{{ $item->item }}">
+                                                </div>
+
+                                                <div class="col-auto">
+                                                    <button type="button"
+                                                        class="btn btn-danger remove_cost_exclude_item">
+                                                        <i class="icon-copy dw dw-delete-3"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+
+                                <!-- Error Message when fields are empty -->
+                                <div id="cost-exclude-error" class="alert alert-danger d-none"></div>
+
+                                <button type="button" id="add-cost-exclude-item" class="btn btn-primary">
+                                    <i class="icon-copy dw dw-add"></i> Add
+                                </button>
+                            </div>
+                        </div>
+
+
+
+
+
 
                     </div>
                 </div>
@@ -261,7 +351,7 @@
         // Adding Itenerary List
         let itineraryIndex = {{ !empty($tour->itinerary) ? count($tour->itinerary) : 0 }};
 
-           function addItineraryItem() {
+        function addItineraryItem() {
             let itineraryItem = `
                 <div class="card mb-2 p-2 itinerary-item">
 
@@ -313,50 +403,6 @@
             }
             $(this).closest('.itinerary-item').remove();
         });
-
-
-
-
-
-        // OLD
-
-    //     $('#add_itinerary').on('click', function() {
-
-    //         let lastContent = $('.itinerary-item textarea').last().val();
-
-    //         if (lastContent !== undefined && lastContent.trim() === '') {
-    //             alert('Please fill the current itinerary content first.');
-    //             return;
-    //         }
-
-    //         itineraryIndex++;
-
-    //         $('#itinerary_container').append(`
-    //     <div class="card mb-2 p-2 itinerary-item">
-
-    //         <input type="text"
-    //                name="itinerary[${itineraryIndex}][title]"
-    //                class="form-control mb-2"
-    //                placeholder="Day ${itineraryIndex} Title (optional)">
-
-    //         <textarea
-    //             name="itinerary[${itineraryIndex}][content]"
-    //             class="form-control mb-2"
-    //             placeholder="Enter itinerary content (required)..."></textarea>
-    //             <span class="text-danger itinerary_error"></span>
-
-    //         <button type="button" class="btn btn-danger btn-sm remove-itinerary">
-    //             Remove
-    //         </button>
-
-    //     </div>
-    // `);
-
-    //     });
-    //     // Remove itinerary from the list
-    //     $(document).on('click', '.remove-itinerary', function() {
-    //         $(this).closest('.itinerary-item').remove();
-    //     });
 
 
 
@@ -439,6 +485,134 @@
         /* ---UPDATE PRICING MECHANISM END --- */
 
 
+        /* --- COST INCLUDES MECHANISM START --- */
+
+        let costIncludeIndex = {{ count($tour->costItems->where('type', 'include')) }};
+
+        function addCostIncludeRow() {
+            let costIncludeItem = `
+    <div class="row mb-2 align-items-center cost-include-item">
+
+        <div class="col">
+            <input type="text"
+                   name="costInclude[${costIncludeIndex}][item]"
+                   class="form-control"
+                   placeholder="Enter cost include...">
+        </div>
+
+        <div class="col-auto">
+            <button type="button"
+                    class="btn btn-danger remove-cost-include-item">
+                <i class="icon-copy dw dw-delete-3"></i>
+            </button>
+        </div>
+
+    </div>
+`;
+
+            $('#cost-include-container').append(costIncludeItem);
+            costIncludeIndex++;
+        }
+
+
+        $('#add_cost_include_item').on('click', function() {
+            let lastCostIncludeItem = $('#cost-include-container input').last().val();
+            if (lastCostIncludeItem !== undefined && lastCostIncludeItem.trim() === '') {
+                $('#cost-include-error')
+                    .removeClass('d-none')
+                    .text('Can not allow empty cost include!');
+                return;
+            }
+
+            // Clearing the cost include error
+            $('#cost-include-error').addClass('d-none').text('');
+
+            addCostIncludeRow();
+        });
+
+
+        // Remove cost include item from the list
+        $('#cost-include-container').on('click', '.remove-cost-include-item', function() {
+
+            if ($('.cost-include-item').length == 1) {
+                $('#cost-include-error')
+                    .removeClass('d-none')
+                    .text('At least one "Cost include Item" is required!');
+                return;
+            }
+
+            $(this).closest('.cost-include-item').remove();
+        });
+
+        /* --- COST INCLUDES MECHANISM END --- */
+
+
+
+
+        /* --- COST EXCLUDES MECHANISM START --- */
+
+        let costExcludeIndex = {{ count($tour->costItems->where('type', 'exclude')) }};;
+
+        function addCostExcludeRow() {
+            let costExcludeItem = `
+     <div class="row mb-2 align-items-center cost-exclude-item">
+
+        <div class="col">
+            <input type="text"
+                   name="costExclude[${costExcludeIndex}][item]"
+                   class="form-control"
+                   placeholder="Enter cost exclude...">
+        </div>
+
+        <div class="col-auto">
+            <button type="button"
+                    class="btn btn-danger remove_cost_exclude_item">
+                <i class="icon-copy dw dw-delete-3"></i>
+            </button>
+        </div>
+
+    </div>
+`;
+
+            $('#cost-exclude-container').append(costExcludeItem);
+            costExcludeIndex++;
+        }
+
+
+        $('#add-cost-exclude-item').on('click', function() {
+            let lastCostExcludeItem = $('#cost-exclude-container input').last().val();
+            if (lastCostExcludeItem !== undefined && lastCostExcludeItem.trim() === '') {
+                $('#cost-exclude-error')
+                    .removeClass('d-none')
+                    .text('Can not allow empty cost exclude!');
+                return;
+            }
+
+            // Clearing the cost exclude error
+            $('#cost-exclude-error').addClass('d-none').text('');
+
+            addCostExcludeRow();
+        });
+
+
+        // Remove cost exclude item from the list
+        $('#cost-exclude-container').on('click', '.remove_cost_exclude_item', function() {
+
+            if ($('.cost-exclude-item').length == 1) {
+                $('#cost-exclude-error')
+                    .removeClass('d-none')
+                    .text('At least one "Cost exclude Item" is required!');
+                return;
+            }
+
+            $(this).closest('.cost-exclude-item').remove();
+        });
+
+
+
+        /* --- COST EXCLUDES MECHANISM END --- */
+
+
 
 
 
@@ -454,9 +628,9 @@
             var formdata = new FormData(form);
             formdata.append('overview', overview);
 
-            // for (let [key, value] of formdata.entries()) {
-            //     console.log(key, value, typeof value);
-            // }
+            for (let [key, value] of formdata.entries()) {
+                console.log(key, value, typeof value);
+            }
 
             $.ajax({
                 url: $(form).attr('action'),

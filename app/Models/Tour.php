@@ -34,6 +34,8 @@ class Tour extends Model
         ];
     }
 
+    /* ---RELATIONSHIPS START --- */
+
     public function author(){
         return $this->hasOne(User::class, 'id', 'author_id');
     }
@@ -45,6 +47,15 @@ class Tour extends Model
     public function tourPrices(){
         return $this->hasMany(TourPrice::class, 'tour_id');
     }
+
+
+    public function costItems(){
+        return $this->hasMany(TourCostItem::class);
+    }
+
+
+    /* ---RELATIONSHIPS END --- */
+
 
 
     public function scopeSearch($query, $term){

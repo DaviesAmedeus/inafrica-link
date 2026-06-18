@@ -30,7 +30,9 @@ class CreateTourRequest extends FormRequest
             'featured_image' => 'required|mimes:png,jpg,jpeg|max:2050',
             'itinerary' => 'required|array',
             'itinerary.*.title' => 'required|string|max:255',
-            'itinerary.*.content' => 'required|string',
+            // 'itinerary.*.content' => 'required|string',
+            'costInclude' => 'required|array|max:255',
+            'costExclude' => 'required|array|max:255',
         ];
     }
 }
