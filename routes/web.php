@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 /* --- STATIC ROUTES --- */
 Route::controller(HomeController::class)->group(function(){
     Route::get('/', 'index')->name('home');
-    //Route::get('/about', 'about')->name('about'); //page not yet created
+    Route::view('/about', 'front.pages.about');
 });
 
 
