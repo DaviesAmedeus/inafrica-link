@@ -86,6 +86,8 @@
                     <div class="navbar-nav ms-auto py-0">
                         <a href="{{ route('home') }}"
                             class="nav-item nav-link  {{ Route::is('home') ? 'active' : '' }}">Home</a>
+                            <a href="{{ route('about') }}"
+                            class="nav-item nav-link  {{ Route::is('about') ? 'active' : '' }}">About</a>
                         {!! navigations() !!}
 
 

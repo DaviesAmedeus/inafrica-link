@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Route;
 /* --- STATIC ROUTES --- */
 Route::controller(HomeController::class)->group(function(){
     Route::get('/', 'index')->name('home');
-    Route::view('/about', 'front.pages.about');
+    Route::view('/about', 'front.pages.about')->name('about');
 });
 
 
-/* --- ROUTES CONTROLLING THE TOURS --- */
+/* --- ROUTES DISPLAYING THE TOURS --- */
 Route::controller(TourController::class)->group(function () {
     Route::get('/tours/category/{slug}', 'categoryTours')->name('category_tours'); //display selected category tours
     Route::get('/tour/{slug}', 'readTour')->name('read_tour');
