@@ -6,10 +6,10 @@
             </div>
             <div class="row g-4">
 
-                <x-front.team-item imgLink="Emma.webp" name="Emmanuel Kaaya" designation="Founder & CEO" />
-                <x-front.team-item imgLink="guide1.webp" name="TBD" designation="TBD" />
-                <x-front.team-item imgLink="guide2.webp" name="TBD" designation="TBD" />
-                <x-front.team-item imgLink="guide3.webp" name="TBD" designation="TBD" />
+                <x-front.team-item imgLink="Emma.webp" name="Emmanuel Kaaya" designation="Director & Travel Consultant" />
+                <x-front.team-item imgLink="Abeli.webp" name="Abeli Ayo" designation="Head of Guiding" />
+                <x-front.team-item imgLink="Juma.webp" name="Juma Daudi" designation="Road Trip Driver" />
+                <x-front.team-item imgLink="Hellen.webp" name="Hellen Lucas" designation="Operator" />
             </div>
         </div>
     </div>
