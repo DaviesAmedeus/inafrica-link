@@ -4,10 +4,10 @@
                 <div class="row g-5">
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item d-flex flex-column">
-                           
-                           
+
+
                                 <h4 class="mb-4 text-white"> {{ settings()?->site_title ?? 'Get In Touch' }}</h4>
-                            
+
 
 
                             <a href=""><i class="fas fa-home me-2"></i> Block B, Ubungo South. Plot No. 1428 Dar
@@ -22,20 +22,20 @@
 
 
                             <div class="d-flex align-items-center">
-                                @if (site_social_links()->facebook_url ?? '')
+                                @if (site_social_links()?->facebook_url ?? '')
                                     <i class="fas fa-share fa-2x text-white me-2"></i>
                                     <a class="btn-square btn btn-primary rounded-circle mx-1"
                                         href="{{ site_social_links()->facebook_url }}" target="_blank">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
                                 @endif
-                                @if (site_social_links()->instagram_url ?? '')
+                                @if (site_social_links()?->instagram_url ?? '')
                                     <a class="btn-square btn btn-primary rounded-circle mx-1"
                                         href="{{ site_social_links()->instagram_url }}" target="_blank">
                                         <i class="fab fa-instagram"></i>
                                     </a>
                                 @endif
-                                @if (site_social_links()->linkedin_url ?? '')
+                                @if (site_social_links()?->linkedin_url ?? '')
                                     <a class="btn-square btn btn-primary rounded-circle mx-1"
                                         href="{{ site_social_links()->linkedin_url }}" target="_blank">
                                         <i class="fab fa-linkedin-in"></i>
