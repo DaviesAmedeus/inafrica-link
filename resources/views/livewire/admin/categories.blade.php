@@ -79,7 +79,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Parent category</th>
-                            <th>N . of posts</th>
+                            <th>No. of Tours</th>
                             <th>Actions</th>
                         </thead>
 

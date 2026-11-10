@@ -7,9 +7,7 @@
             {{-- TOUR HEADER --}}
             <div class="mb-5">
 
-                {{-- <span class="badge bg-primary mb-3 px-3 py-2">
-                        Featured Tour
-                    </span> --}}
+
 
                 <h1 class="mb-3 font-weight-bold"> {{ $tour->title }} </h1>
 
@@ -199,19 +197,11 @@
                                         <li class="mb-2">
                                             <i class="fa fa-check mr-2 text-success"></i>
                                             {{ $item->item }}
-
                                         </li>
-
                                         @endforeach
-
-
-
                                     </ul>
-
                                 </div>
-
                                 <div class="col-md-6">
-
                                     <h5 class="font-weight-bold mb-3">
 
                                         <i class="fa fa-times-circle mr-2 text-danger"></i>

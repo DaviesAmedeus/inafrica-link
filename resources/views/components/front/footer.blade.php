@@ -13,10 +13,10 @@
                             <a href=""><i class="fas fa-home me-2"></i> Block B, Ubungo South. Plot No. 1428 Dar
                                 es
                                 salaam</a>
-                            @if (settings()->site_email)
+                            @if (settings()?->site_email)
                                 <a href="#!"><i class="fas fa-envelope me-2"></i>{{ settings()->site_email }}</a>
                             @endif
-                            @if (settings()->site_phone)
+                            @if (settings()?->site_phone)
                                 <a href="#!"><i class="fas fa-phone me-2"></i>{{ settings()->site_phone }}</a>
                             @endif
 

@@ -75,9 +75,13 @@ class TourController extends Controller
         SEOTools::opengraph()->setUrl(route('read_tour', ['slug' => $tour->slug]));
         SEOTools::opengraph()->addProperty('type', 'article');
         SEOTools::opengraph()->addImage(asset('storage/images/tours/' . $tour->breadcrumb_img_tour));
-        
+
         //twitter SEO
         SEOTools::twitter()->setImage(asset('storage/images/tours/' . $tour->breadcrumb_img_tour));
+
+        // Canonical url
+        SEOTools::setCanonical(url()->current());
+
 
         $data = [
             'tour' => $tour,

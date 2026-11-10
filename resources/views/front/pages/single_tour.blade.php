@@ -1,6 +1,35 @@
 @extends('front.layout.pages-layout')
 @section('meta_tags')
 {!! SEO::generate() !!}
+
+
+    @php
+        $tourSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'TouristTrip',
+            'name' => $tour->title,
+            'url' => url()->current(),
+
+            'itinerary' => [
+                '@type' => 'ItemList',
+                'itemListElement' => collect($tour->itinerary)
+                    ->map(function ($item, $index) {
+                        return [
+                            '@type' => 'ListItem',
+                            'position' => $index + 1,
+                            'name' => $item['title'],
+                            'description' => strip_tags($item['content'] ?? ''),
+                        ];
+                    })
+                    ->values()
+                    ->all(),
+            ],
+        ];
+    @endphp
+
+    <script type="application/ld+json">
+        @json($tourSchema)
+    </script>
 @endsection
 @section('breadcrumb-section')
     <!-- Breadcrumb Start -->
