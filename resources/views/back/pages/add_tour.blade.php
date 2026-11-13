@@ -74,13 +74,8 @@
                 <div class="card card-box mb-2">
                     <div class="card-header weight-500">TOUR PRICING</div>
                     <div class="card-body">
-
-
-
-
                         <div class="table-responsive">
                             <table class="table table-bordered" id="pricing-table">
-
                                 <thead>
                                     <tr>
                                         <th>People</th>
@@ -88,9 +83,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-
                                 <tbody id="pricing-body"></tbody>
-
                             </table>
                         </div>
                         <!-- Error Message when fields are empty -->
@@ -98,7 +91,6 @@
                         <button type="button" id="add-price-group" class="btn btn-primary">
                             + Add Pricing Group
                         </button>
-
                     </div>
                 </div>
 
@@ -206,9 +198,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
         <div class="mb-3">
@@ -226,348 +215,24 @@
 @push('scripts')
     {{-- For tags interactivity --}}
     <script src="{{ asset('back/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
+
+    {{-- CK Editor --}}
     <script src="{{ asset('ckeditor4-4.22.1/ckeditor.js') }}"></script>
-    <script>
-        $('input[type="file"][name="featured_image"]').ijaboViewer({
-            preview: 'img#featured_image_preview',
-            imageShape: 'rectangular',
-            allowedExtensions: ['jpeg', 'jpg', 'png'],
-            onErrorShape: function(message, element) {
-                alert(message);
-            },
-            onInvalidType: function(message, element) {
-                alert(message);
-            },
-            onSuccess: function(message, element) {}
-        });
 
+    {{-- Featured Image Preview --}}
+    <script src="{{ asset('back/js/admin/featured-image-preview.js') }}"></script>
 
+    {{-- Adding Itinerary Mechanism --}}
+     <script src="{{ asset('back/js/admin/add-itinerary.js') }}"></script>
 
+    {{-- Adding Price Mechanism --}}
+    <script src="{{ asset('back/js/admin/add-price.js') }}"></script>
 
-        /* --- ADDING ITINERARY MECHANISM -START --- */
-        let itineraryIndex = 0;
 
-        function addItineraryItem() {
-            let itineraryItem = `
-                <div class="card mb-2 p-2 itinerary-item">
+    {{-- Adding Cost includes & Excludes Mechanism --}}
+    <script src="{{ asset('back/js/admin/cost-includes-excludes.js') }}"></script>
 
-                    <input type="text"
-                        name="itinerary[${itineraryIndex}][title]"
-                        class="form-control mb-2"
-                        placeholder="Itinerary title (Required)...">
+     {{-- Tour Submission using AJAX --}}
+    <script src="{{ asset('back/js/admin/create-tour-submission.js') }}"></script>
 
-                    <textarea
-                        name="itinerary[${itineraryIndex}][content]"
-                        class="form-control mb-2"
-                        placeholder="Itinerary content (Optional)..."></textarea>
-                        <span class="text-danger itinerary_error"></span>
-
-                    <button type="button" class="btn btn-danger btn-sm remove-itinerary">
-                        Remove
-                    </button>
-
-                </div> `;
-
-            $('#itinerary_container').append(itineraryItem);
-            itineraryIndex++;
-        }
-
-        addItineraryItem();
-
-        $('#add_itinerary').on('click', function() {
-
-            let lastItineraryTitle = $('.itinerary-item input').last().val();
-
-            if (lastItineraryTitle !== undefined && lastItineraryTitle.trim() === '') {
-                $('#itinerary-error')
-                    .removeClass('d-none')
-                    .text('"Itinerary title" is required but "Itinerary content" is optional!.');
-                return;
-            }
-            // Clearing error
-            $('#itinerary-error').addClass('d-none').text('');
-
-            addItineraryItem();
-        });
-
-        // Remove itinerary from the list
-        $(document).on('click', '.remove-itinerary', function() {
-            if ($('#itinerary_container div').length == 1) {
-                $('#itinerary-error')
-                    .removeClass('d-none')
-                    .text('At least one "Itinerary Item" is required!');
-                return;
-            }
-            $(this).closest('.itinerary-item').remove();
-        });
-
-        /* --- ADDING ITINERARY MECHANISM -END  --- */
-
-
-
-
-        /* ---TOUR PRICING MECHANISM START --- */
-        let pricingIndex = 0;
-
-        function addPricingRow() {
-            let row = `
-            <tr>
-                <td>
-                    <input type="number"
-                        name="pricing[${pricingIndex}][people]"
-                        class="form-control people-input"
-                        placeholder="e.g 5"
-                        min="1"
-                        max="10">
-                </td>
-
-                <td>
-                    <input type="number"
-                        name="pricing[${pricingIndex}][price]"
-                        class="form-control price-input"
-                        placeholder="e.g 1200"
-                        min="0"
-                        step="0.01">
-                </td>
-
-                <td>
-                    <button type="button"
-                        class="btn btn-danger remove-row">
-                        <i class="icon-copy dw dw-delete-3"></i>
-                    </button>
-                </td>
-
-            </tr>
-        `;
-
-            $('#pricing-body').append(row);
-
-            pricingIndex++;
-        };
-
-        addPricingRow();
-
-        $('#add-price-group').click(function() {
-
-            let lastRow = $('#pricing-body tr:last');
-            let people = lastRow.find('.people-input').val();
-            let price = lastRow.find('.people-price').val();
-
-            // VALIDATION (checking if either of the fields are empty)
-            if (people == '' || price == '') {
-                $('#pricing-error')
-                    .removeClass('d-none')
-                    .text('Please complete the current pricing group first.');
-                return;
-            }
-
-            // CLEAR ERROR
-            $('#pricing-error').addClass('d-none').text('');
-
-            addPricingRow();
-        });
-
-        // Removing the pricing group row
-        $(document).on('click', '.remove-row', function() {
-
-            if ($('#pricing-body tr').length == 1) {
-
-                $('#pricing-error')
-                    .removeClass('d-none')
-                    .text('At least one pricing group is required.');
-                return;
-            }
-            $(this).closest('tr').remove();
-        });
-
-        /* ---PRICING MECHANISM END --- */
-
-
-        /* --- COST INCLUDES MECHANISM START --- */
-
-        let costIncludeIndex = 0;
-
-        function addCostIncludeRow() {
-            let costIncludeItem = `
-    <div class="row mb-2 align-items-center cost-include-item">
-
-        <div class="col">
-            <input
-                type="text"
-                name="costInclude[${costIncludeIndex}]"
-                class="form-control"
-                placeholder="Enter cost include...">
-        </div>
-
-        <div class="col-auto">
-            <button
-                type="button"
-                class="btn btn-danger remove-cost-include-item">
-                <i class="icon-copy dw dw-delete-3"></i>
-            </button>
-        </div>
-
-    </div>
-`;
-
-            $('#cost-include-container').append(costIncludeItem);
-            costIncludeIndex++;
-        }
-
-        addCostIncludeRow();
-
-        $('#add_cost_include_item').on('click', function() {
-            let lastCostIncludeItem = $('#cost-include-container input').last().val();
-            if (lastCostIncludeItem !== undefined && lastCostIncludeItem.trim() === '') {
-                $('#cost-include-error')
-                    .removeClass('d-none')
-                    .text('Can not allow empty cost include!');
-                return;
-            }
-
-            // Clearing the cost include error
-            $('#cost-include-error').addClass('d-none').text('');
-
-            addCostIncludeRow();
-        });
-
-
-        // Remove cost include item from the list
-        $('#cost-include-container').on('click', '.remove-cost-include-item', function() {
-
-            if ($('.cost-include-item').length == 1) {
-                $('#cost-include-error')
-                    .removeClass('d-none')
-                    .text('At least one "Cost include Item" is required!');
-                return;
-            }
-
-            $(this).closest('.cost-include-item').remove();
-        });
-
-        /* --- COST INCLUDES MECHANISM END --- */
-
-
-
-        /* --- COST EXCLUDES MECHANISM START --- */
-
-        let costExcludeIndex = 0;
-
-        function addCostExcludeRow() {
-            let costExcludeItem = `
-    <div class="row mb-2 align-items-center cost-exclude-item">
-
-        <div class="col">
-            <input
-                type="text"
-                name="costExclude[${costExcludeIndex}]"
-                class="form-control"
-                placeholder="Enter cost exclude...">
-        </div>
-
-        <div class="col-auto">
-            <button
-                type="button"
-                class="btn btn-danger remove_cost_exclude_item">
-                <i class="icon-copy dw dw-delete-3"></i>
-            </button>
-        </div>
-
-    </div>
-`;
-
-            $('#cost-exclude-container').append(costExcludeItem);
-            costExcludeIndex++;
-        }
-
-        addCostExcludeRow();
-
-        $('#add-cost-exclude-item').on('click', function() {
-            let lastCostExcludeItem = $('#cost-exclude-container input').last().val();
-            if (lastCostExcludeItem !== undefined && lastCostExcludeItem.trim() === '') {
-                $('#cost-exclude-error')
-                    .removeClass('d-none')
-                    .text('Can not allow empty cost exclude!');
-                return;
-            }
-
-            // Clearing the cost exclude error
-            $('#cost-exclude-error').addClass('d-none').text('');
-
-            addCostExcludeRow();
-        });
-
-
-        // Remove cost exclude item from the list
-        $('#cost-exclude-container').on('click', '.remove_cost_exclude_item', function() {
-
-            if ($('.cost-exclude-item').length == 1) {
-                $('#cost-exclude-error')
-                    .removeClass('d-none')
-                    .text('At least one "Cost exclude Item" is required!');
-                return;
-            }
-
-            $(this).closest('.cost-exclude-item').remove();
-        });
-
-
-
-        /* --- COST EXCLUDES MECHANISM END --- */
-
-
-
-
-
-        /* ---SUBMITING THE FORM USING AJAX (CREATING THE TOUR) --- */
-        $('#addPostForm').on('submit', function(e) {
-            e.preventDefault();
-            var form = this;
-            var overview = CKEDITOR.instances.overview.getData();
-            var formdata = new FormData(form);
-            formdata.append('overview', overview);
-                        for (let [key, value] of formdata.entries()) {
-                console.log(key, value);
-            }
-
-            $.ajax({
-                url: $(form).attr('action'),
-                method: $(form).attr('method'),
-                data: formdata,
-                processData: false,
-                dataType: 'json',
-                contentType: false,
-                beforeSend: function() {
-                    $(form).find('span.error-text').text('');
-                },
-                success: function(data) {
-                    if (data.status == 1) {
-
-                        $().notifa({
-                            vers: 2,
-                            cssClass: 'success',
-                            html: data.message,
-                            delay: 1500
-                        });
-
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 1500);
-                    } else {
-                        $().notifa({
-                            vers: 2,
-                            cssClass: 'error',
-                            html: data.message,
-                            delay: 2500
-                        });
-                    }
-                },
-                error: function(data) {
-                    $.each(data.responseJSON.errors, function(prefix, val) {
-                        $(form).find('span.' + prefix + '_error').text(val[0]);
-                    });
-                }
-            });
-        });
-    </script>
 @endpush
